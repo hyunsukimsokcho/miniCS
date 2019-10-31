@@ -3,7 +3,7 @@ language: generic
 services: docker
 script:
 - docker run --mount src=$TRAVIS_BUILD_DIR/src,target=/usr/src/tex,type=bind dxjoke/tectonic-docker
-  /bin/sh -c "tectonic --keep-intermediates group_report.tex"
+  /bin/sh -c "tectonic --keep-intermediates --reruns 0 group_report.tex; biber group_report; tectonic group_report.tex"
 deploy:
   provider: releases
   api_key:
