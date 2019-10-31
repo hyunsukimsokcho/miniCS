@@ -4,3 +4,4 @@
 It is usually known that there is no gold standard for setting critical sections. (i.e. when to acquire lock, then when to release the lock) 
 We may need to tackle some intractability such as combinatorically explosive cases due to nondeterministic thread interleaving.
 
+[![Build Status](https://api.travis-ci.com/hyunsukimsokcho/miniCS.svg)](https://travis-ci.com/hyunsukimsokcho/miniCS)
