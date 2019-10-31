@@ -7,5 +7,5 @@ It is usually known that there is no gold standard for setting critical sections
 We may need to tackle some intractability such as combinatorically explosive cases due to nondeterministic thread interleaving.
 
 ### Progress
-*[31 Oct]* Initial setup for group report release
-
+**[31 Oct]** Setup for group report release.
+**[31 Oct]** Start writing *abstraction*.
