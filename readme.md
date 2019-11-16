@@ -8,5 +8,7 @@ We may need to tackle some intractability such as combinatorically explosive cas
 
 ### Progress
 **[31 Oct]** Initial setup for group report release.
+
 **[02 Nov]** Author registration complete.
-**[05 Oct]** Start writing *abstraction*.
+
+**[05 Nov]** Start writing *abstraction*.
