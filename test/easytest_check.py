@@ -11,6 +11,8 @@ if len(outputs)==10:
     test[0] = True
 else:
     test[0] = False
+    test = [False] * 4
+    print(test)
     quit()
 
 # test2: check the output is digits 
@@ -19,7 +21,8 @@ for line in outputs:
     if m:
         checkarr.append((int(m.group(1)), int(m.group(2))))
     else:
-        test[1]= False
+        test = [True, False, False, False]
+        print(test)
         quit()
 test[1]= True
 
