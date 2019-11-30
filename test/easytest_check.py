@@ -1,8 +1,18 @@
 import subprocess
 import re
-output = subprocess.getoutput('exec ./easy_test')
 
+# generate exec file
+s = subprocess.check_call('gcc -o ./easy_test easytest.c -lpthread', shell = True) 
+if s!=0:
+    print("Error in making exec file")
+else:
+    print("Done in making exec file")
+#subprocess.call('gcc -o ./easy_test2 easytest.c -lpthread')
+
+# run the exec flie
+output = subprocess.getoutput('exec ./easy_test')
 outputs = output.split('\n')
+
 p = re.compile('thread([1-2]): ([0-9])')
 test = [-1] * 4
 checkarr = []

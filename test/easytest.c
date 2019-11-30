@@ -49,6 +49,8 @@ int main()
     pthread_join(pthread[0], (void *)&status);
     pthread_join(pthread[1], (void *)&status);
 
+    return 1;
+
 
 }
 // pthread_mutex_lock(&mutex_lock);
