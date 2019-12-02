@@ -14,6 +14,7 @@ lock case 2: lock for global function => only 2 locks are needed.
 #define USING 1
 #define LEFT(i) (i+N-1)%N
 #define RIGHT(i) (i)%N
+#define SEC_NSEC 1000000000LL 
 
 void get_chopstick(int p);
 void put_chopstick(int p);
@@ -70,6 +71,7 @@ void get_chopstick(int p)
     {
         chopsticks[LEFT(p)] = USING;
         chopsticks[RIGHT(p)] = USING;
+        
         printf("philosopher %d: get chopstick\n", p);
     }
     

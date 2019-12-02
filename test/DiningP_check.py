@@ -5,8 +5,23 @@ for dining Philosopher
 
 import subprocess
 import re
+import os, time
+from threading import Timer
+from datetime import datetime
 
 test = [False] * 9
+
+def exit_func():
+    print("Dead lock ERROR")
+    test[0]=False
+    print(test)
+    os._exit(0)
+
+
+
+# return deadlock error when running time is over 8 seconds.
+Timer(8, exit_func).start()
+
 # generate exec file
 s = subprocess.check_call('gcc -o ./dp DiningP.c -lpthread', shell = True) 
 
@@ -65,5 +80,5 @@ for id in range(1,6):
     if id not in ids:
         test[id+3] = True
 
-
 print(test)
+os._exit(0)
