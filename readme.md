@@ -11,4 +11,10 @@ We may need to tackle some intractability such as combinatorically explosive cas
 
 **[02 Nov]** Author registration complete.
 
-**[05 Nov]** Start writing *abstract*.
+**[05 Nov]** Started writing *abstract*.
+
+**[28 Nov]** Wrote two easy test cases. Used Clang AST to find references to global variables.
+
+**[29 Nov]** Used Clang AST to find scopes.
+
+**[1 Dec]** Generated all candidates to place a lock.

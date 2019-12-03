@@ -11,7 +11,7 @@ LIB = -fno-rtti \
     -lclangStaticAnalyzerFrontend -lclangStaticAnalyzerCheckers \
     -lclangStaticAnalyzerCore -lclangAnalysis \
     -lclangARCMigrate -lclangRewriteFrontend \
-    -lclangEdit  -lclangAST \
+    -lclangEdit -lclangAST \
     -lclangLex -lclangBasic  -lclangCodeGen -lclangSema \
     -lclangAnalysis  -lclangAST -lclangParse -lclangLex \
     -lclangASTMatchers \
