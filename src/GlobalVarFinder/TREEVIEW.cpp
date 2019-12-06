@@ -35,6 +35,10 @@ static StatementMatcher scope_match =
     )
   ).bind("scope");
 
+// return matcher
+static StatementMatcher return_match =
+  returnStmt().bind("return");
+
 // V[idx] = val, with resizing if necessary
 void add_to_vec(std::vector<int> &V, size_t idx, int val){
   while(V.size() <= idx) V.push_back(0);
@@ -117,6 +121,23 @@ struct ScopePrinter: public clang::ast_matchers::MatchFinder::MatchCallback{
   }
 };
 
+// check if there is a return statement in line i
+std::vector<int> has_return;
+
+// find the return statements and print them
+struct ReturnPrinter: public clang::ast_matchers::MatchFinder::MatchCallback{
+  virtual void run(MatchFinder::MatchResult const &result) override{
+    SourceManager &manager(
+      const_cast<clang::SourceManager &>(result.Context->getSourceManager()));
+    ReturnStmt const *rs = result.Nodes.getNodeAs<ReturnStmt>("return");
+    if(rs){
+      int line = source_lineno(rs->getSourceRange(), &manager, false);
+      std::cout << "Return statement in line " << line << std::endl;
+      add_to_vec(has_return, line, 1);
+    }
+  }
+};
+
 /* ------------------------------------------------ */
 
 int main(int argc, const char *argv[]){
@@ -126,15 +147,13 @@ int main(int argc, const char *argv[]){
 
   GlobalVarPrinter gvprinter;
   ScopePrinter sprinter;
+  ReturnPrinter rprinter;
   MatchFinder MF;
+
   MF.addMatcher(global_match, &gvprinter);
   MF.addMatcher(scope_match, &sprinter);
+  MF.addMatcher(return_match, &rprinter);
   tool.run(newFrontendActionFactory(&MF).get());
-
-  for(int x: has_global) std::cout<<x<<' ';
-  std::cout<<std::endl;
-  for(int x: scope_delta) std::cout<<x<<' ';
-  std::cout<<std::endl;
 
   for(size_t l = 0; l < scope_delta.size(); l++){
     int depth = 0;
@@ -143,6 +162,7 @@ int main(int argc, const char *argv[]){
     int start_depth = depth;
     bool met_global = false;
     for(size_t r = l+1; r < scope_delta.size(); r++){
+      if(r < has_return.size() && has_return[r]) break;
       if(r < has_global.size() && has_global[r]) met_global = true;
       depth+= scope_delta[r];
       if(depth == 0) break;

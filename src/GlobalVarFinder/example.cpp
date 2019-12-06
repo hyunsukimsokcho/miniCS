@@ -5,6 +5,7 @@ bool foo(int c)
     int a = c;
     int b = gg;
     int V = a;
+    V = gg;
     return true;
 }
 
@@ -13,7 +14,8 @@ void bar()
     int x = 1;
     for (int i = 0; i < 10; ++i)
     {
-        int y = x;
+        gg = x;
+        arr[i] = x*x;
     }
 }
 
