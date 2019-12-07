@@ -16,6 +16,8 @@ void bar()
     {
         gg = x;
         arr[i] = x*x;
+        arr[i]++;
+        -arr[i];
     }
 }
 

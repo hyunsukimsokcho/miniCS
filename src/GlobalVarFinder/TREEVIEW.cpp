@@ -15,37 +15,11 @@ using namespace clang::ast_matchers;
 static llvm::cl::OptionCategory toolCategory("gm options");
 static llvm::cl::extrahelp commonHelp(CommonOptionsParser::HelpMessage);
 
-// global variable reference matcher
-static StatementMatcher global_match =
-  declRefExpr(
-    to(
-      varDecl(
-        hasGlobalStorage()
-      ).bind("globalVar")
-    ), hasAncestor(
-      functionDecl().bind("function")
-    )
-  ).bind("globalRef");
-
-// scope matcher
-static StatementMatcher scope_match =
-  compoundStmt(
-    hasAncestor(
-      functionDecl().bind("function")
-    )
-  ).bind("scope");
-
-// return matcher
-static StatementMatcher return_match =
-  returnStmt().bind("return");
-
 // V[idx] = val, with resizing if necessary
 void add_to_vec(std::vector<int> &V, size_t idx, int val){
   while(V.size() <= idx) V.push_back(0);
   V[idx] = val;
 }
-
-/* ------------------------------------------------ */
 
 // get the location of the source range
 std::string source_location(SourceRange r,
@@ -76,6 +50,21 @@ int source_lineno(SourceRange r,
   return ploc.getLine();
 }
 
+/* ------------------------------------------------ */
+
+// global variable reference matcher
+static StatementMatcher global_match =
+  declRefExpr(
+    to(
+      varDecl(
+        hasGlobalStorage()
+      ).bind("globalVar")
+    ),
+    hasAncestor(
+      functionDecl().bind("function")
+    )
+  ).bind("globalRef");
+
 // true iff the i-th line references a global variable
 std::vector<int> has_global;
 
@@ -97,6 +86,100 @@ struct GlobalVarPrinter: public clang::ast_matchers::MatchFinder::MatchCallback{
     }
   }
 };
+
+/* ---------------------------------------------------------------- */
+/*
+// global variable unary operation matcher
+static StatementMatcher global_unary_match =
+  declRefExpr(
+    to(
+      varDecl(
+        hasGlobalStorage()
+      ).bind("globalVar")
+    ), 
+    hasAncestor(
+      unaryOperator(
+        hasAncestor(
+          functionDecl().bind("function")
+        )
+      ).bind("operator")
+    )
+  ).bind("globalRef");
+
+// true iff the i-th line writes to a global variable
+std::vector<int> has_global_write;
+
+// find the global variable references and print them
+struct GlobalUnaryPrinter: public clang::ast_matchers::MatchFinder::MatchCallback{
+  virtual void run(MatchFinder::MatchResult const &result) override{
+    SourceManager &manager(
+      const_cast<clang::SourceManager &>(result.Context->getSourceManager()));
+    FunctionDecl const *fd = result.Nodes.getNodeAs<FunctionDecl>("function");
+    Expr const *gref = result.Nodes.getNodeAs<Expr>("globalRef");
+    VarDecl const *gvar = result.Nodes.getNodeAs<VarDecl>("globalVar");
+    UnaryOperator const *uop = result.Nodes.getNodeAs<UnaryOperator>("operator");
+    if(fd && gref && gvar && uop){
+      if(!uop->isIncrementOp() && !uop->isDecrementOp()) return;
+      int line = source_lineno(gref->getSourceRange(), &manager, false);
+      std::cout << "Function " << fd->getNameAsString();
+      std::cout << " WRITES to global " << gvar->getNameAsString() << " at ";
+      std::cout << source_location(gref->getSourceRange(), &manager, false);
+      std::cout << std::endl;
+      add_to_vec(has_global_write, line, 1);
+    }
+  }
+};
+*/
+/* ---------------------------------------------------------------- */
+/*
+// global variable assignment matcher (either LHS or RHS)
+static StatementMatcher assignment_match =
+  declRefExpr(
+    to(
+      varDecl(
+        hasGlobalStorage()
+      ).bind("globalVar")
+    ), 
+    hasAncestor(
+      binaryOperator(
+        hasAncestor(
+          functionDecl().bind("function")
+        )
+      ).bind("operator")
+    )
+  ).bind("globalRef");
+
+// find the global variable assignments and print them
+struct GlobalAssignPrinter: public clang::ast_matchers::MatchFinder::MatchCallback{
+  virtual void run(MatchFinder::MatchResult const &result) override{
+    SourceManager &manager(
+      const_cast<clang::SourceManager &>(result.Context->getSourceManager()));
+    FunctionDecl const *fd = result.Nodes.getNodeAs<FunctionDecl>("function");
+    Expr const *gref = result.Nodes.getNodeAs<Expr>("globalRef");
+    VarDecl const *gvar = result.Nodes.getNodeAs<VarDecl>("globalVar");
+    BinaryOperator const *bop = result.Nodes.getNodeAs<BinaryOperator>("operator");
+    if(fd && gref && gvar && bop){
+      if(bop->getLHS() != gvar) return;
+      //if(!uop->isIncrementOp() && !uop->isDecrementOp()) return;
+      int line = source_lineno(gref->getSourceRange(), &manager, false);
+      std::cout << "Function " << fd->getNameAsString();
+      std::cout << " WRITES to global " << gvar->getNameAsString() << " at ";
+      std::cout << source_location(gref->getSourceRange(), &manager, false);
+      std::cout << std::endl;
+      add_to_vec(has_global_write, line, 1);
+    }
+  }
+};
+*/
+/* ---------------------------------------------------------------- */
+
+// scope matcher
+static StatementMatcher scope_match =
+  compoundStmt(
+    hasAncestor(
+      functionDecl().bind("function")
+    )
+  ).bind("scope");
 
 // +1 if a scope starts at the i-th line, -1 if ends, 0 otherwise
 std::vector<int> scope_delta;
@@ -121,6 +204,12 @@ struct ScopePrinter: public clang::ast_matchers::MatchFinder::MatchCallback{
   }
 };
 
+/* ---------------------------------------------------------------- */
+
+// return matcher
+static StatementMatcher return_match =
+  returnStmt().bind("return");
+
 // check if there is a return statement in line i
 std::vector<int> has_return;
 
@@ -138,7 +227,7 @@ struct ReturnPrinter: public clang::ast_matchers::MatchFinder::MatchCallback{
   }
 };
 
-/* ------------------------------------------------ */
+/* ---------------------------------------------------------------- */
 
 int main(int argc, const char *argv[]){
   CommonOptionsParser optionsParser(argc, argv, toolCategory);
@@ -146,16 +235,21 @@ int main(int argc, const char *argv[]){
                  optionsParser.getSourcePathList());
 
   GlobalVarPrinter gvprinter;
+  //GlobalUnaryPrinter guprinter;
+  //GlobalAssignPrinter gaprinter;
   ScopePrinter sprinter;
   ReturnPrinter rprinter;
   MatchFinder MF;
 
   MF.addMatcher(global_match, &gvprinter);
+  //MF.addMatcher(global_unary_match, &guprinter);
   MF.addMatcher(scope_match, &sprinter);
   MF.addMatcher(return_match, &rprinter);
+  //MF.addMatcher(assignment_match, &gaprinter);
   tool.run(newFrontendActionFactory(&MF).get());
 
   for(size_t l = 0; l < scope_delta.size(); l++){
+    if(l+1 < scope_delta.size() && scope_delta[l+1]) continue;
     int depth = 0;
     for(size_t i = 0; i <= l; i++) depth+= scope_delta[i];
     if(depth == 0) continue;
