@@ -1,0 +1,88 @@
+==================
+WARNING: ThreadSanitizer: data race (pid=123)
+  Write of size 4 at 0x0000014ca9c0 by thread T2:
+    #0 myThreadFun(void*) /home/ehdkacjswo/no lock/1.cpp:20 (output+0x4b8706)
+
+  Previous write of size 4 at 0x0000014ca9c0 by thread T1:
+    #0 myThreadFun(void*) /home/ehdkacjswo/no lock/1.cpp:20 (output+0x4b8706)
+
+  Location is global '<null>' at 0x000000000000 (output+0x0000014ca9c0)
+
+  Thread T2 (tid=126, running) created by main thread at:
+    #0 pthread_create ??:? (output+0x426ff6)
+    #1 main /home/ehdkacjswo/no lock/1.cpp:36 (output+0x4b87d7)
+
+  Thread T1 (tid=125, finished) created by main thread at:
+    #0 pthread_create ??:? (output+0x426ff6)
+    #1 main /home/ehdkacjswo/no lock/1.cpp:36 (output+0x4b87c5)
+
+SUMMARY: ThreadSanitizer: data race /home/ehdkacjswo/no lock/1.cpp:20 in myThreadFun(void*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=123)
+  Write of size 4 at 0x0000014ca9b8 by thread T2:
+    #0 myThreadFun(void*) /home/ehdkacjswo/no lock/1.cpp:21 (output+0x4b8721)
+
+  Previous write of size 4 at 0x0000014ca9b8 by thread T1:
+    #0 myThreadFun(void*) /home/ehdkacjswo/no lock/1.cpp:21 (output+0x4b8721)
+
+  Location is global '<null>' at 0x000000000000 (output+0x0000014ca9b8)
+
+  Thread T2 (tid=126, running) created by main thread at:
+    #0 pthread_create ??:? (output+0x426ff6)
+    #1 main /home/ehdkacjswo/no lock/1.cpp:36 (output+0x4b87d7)
+
+  Thread T1 (tid=125, finished) created by main thread at:
+    #0 pthread_create ??:? (output+0x426ff6)
+    #1 main /home/ehdkacjswo/no lock/1.cpp:36 (output+0x4b87c5)
+
+SUMMARY: ThreadSanitizer: data race /home/ehdkacjswo/no lock/1.cpp:21 in myThreadFun(void*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=123)
+  Write of size 4 at 0x0000014ca9bc by thread T2:
+    #0 myThreadFun(void*) /home/ehdkacjswo/no lock/1.cpp:22 (output+0x4b873a)
+
+  Previous write of size 4 at 0x0000014ca9bc by thread T1:
+    #0 myThreadFun(void*) /home/ehdkacjswo/no lock/1.cpp:22 (output+0x4b873a)
+
+  Location is global '<null>' at 0x000000000000 (output+0x0000014ca9bc)
+
+  Thread T2 (tid=126, running) created by main thread at:
+    #0 pthread_create ??:? (output+0x426ff6)
+    #1 main /home/ehdkacjswo/no lock/1.cpp:36 (output+0x4b87d7)
+
+  Thread T1 (tid=125, finished) created by main thread at:
+    #0 pthread_create ??:? (output+0x426ff6)
+    #1 main /home/ehdkacjswo/no lock/1.cpp:36 (output+0x4b87c5)
+
+SUMMARY: ThreadSanitizer: data race /home/ehdkacjswo/no lock/1.cpp:22 in myThreadFun(void*)
+==================
+==================
+WARNING: ThreadSanitizer: thread leak (pid=123)
+  Thread T1 (tid=125, finished) created by main thread at:
+    #0 pthread_create ??:? (output+0x426ff6)
+    #1 main /home/ehdkacjswo/no lock/1.cpp:36 (output+0x4b87c5)
+
+SUMMARY: ThreadSanitizer: thread leak ??:? in __interceptor_pthread_create
+==================
+==================
+WARNING: ThreadSanitizer: thread leak (pid=123)
+  Thread T2 (tid=126, finished) created by main thread at:
+    #0 pthread_create ??:? (output+0x426ff6)
+    #1 main /home/ehdkacjswo/no lock/1.cpp:36 (output+0x4b87d7)
+
+SUMMARY: ThreadSanitizer: thread leak ??:? in __interceptor_pthread_create
+==================
+==================
+WARNING: ThreadSanitizer: thread leak (pid=123)
+  Thread T3 (tid=127, finished) created by main thread at:
+    #0 pthread_create ??:? (output+0x426ff6)
+    #1 main /home/ehdkacjswo/no lock/1.cpp:36 (output+0x4b87e9)
+
+SUMMARY: ThreadSanitizer: thread leak ??:? in __interceptor_pthread_create
+==================
+ThreadSanitizer: reported 6 warnings
+Thread ID: -671217920, Static: 2, Global: 2
+Thread ID: -688126208, Static: 4, Global: 4
+Thread ID: -639356614, Static: 6, Global: 6
