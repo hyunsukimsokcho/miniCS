@@ -1,4 +1,4 @@
-\documentclass[sigchi]{acmart}
+\documentclass[sigconf]{acmart}
 \usepackage{graphicx}
 \usepackage{comment}
 \usepackage{float}
@@ -9,9 +9,6 @@
 \setcopyright{rightsretained}
 
 \acmConference{CS454 AI Based Software Engineering}{November 1st, 2019}{KAIST, South Korea}
-\acmDOI{10.1145/3306307.3328180}
-\acmISBN{978-1-4503-6317-4/19/07}
-\acmBooktitle{CS454 AI Based Software Engineering, November 1st, 2019, KAIST, South Korea}
 \begin{document}
 
 \title{MiniCS: Critical Section Minimisation in Concurrent Programming}
@@ -36,8 +33,22 @@
 }
 \email{ehdkacjswo@kaist.ac.kr}
 
+\author{Jaemin Choi}
+\affiliation{
+  \institution{KAIST}
+  \city{Daejeon, Rep. of Korea}
+}
+\email{cjm98@kaist.ac.kr}
+
+\author{Heeju Wi}
+\affiliation{
+  \institution{KAIST}
+  \city{Daejeon, Rep. of Korea}
+}
+\email{bb0711@kaist.ac.kr}
+
 \begin{abstract}
-The abstract text goes here. These are the changes I made.
+Modern machines consume massive amount of data as well as drastic amount of computations, as the era of artificial intelligence. In hardware manufacturing industry, developing SoC optimized to such computations is already on-going process. Multi-core with machines are prevalent thesedays. Still, thanks to Moore's law and Dennard's scaling, software implementation that synchronizes multiple threads is unavoidable to achieve reasonably scalable computing. However, it is often a fear to write multi-threaded code due to its nondeterministic behavior. In order to tame the parallelism with scalability, using synchronization primitives such as lock and semaphore is mandatory to prevent race conditions. While which API to use is rather trivial, it is usually known that setting critical sections (when to acquire lock, then when to release the lock) is not trivial at all. In this work, we tackle such intractability by applying combination of heuristics for search and static analysis for rigorous evaluation and correctness.
 \end{abstract}
 
 \maketitle
@@ -48,7 +59,29 @@ Here is the text of your introduction.
 \subsection{Subsection Heading Here}
 Write your subsection text here.
 
+\section{Background}
+\subsection{Critical section}
+
+\subsection{Genetic algorithm}
+
+\section{Experiment design}
+
+\subsection{Gene representation}
+
+\subsection{Mutation}
+
+\subsection{Crossover}
+
+\subsection{Static analyzer}
+
+\subsection{Fitness evaluation}
+
+\section{Evaluation}
+Research questions?
+
 \section{Conclusion}
 Write your conclusion here.
+Possible improvements (e.g. Coevolution with Thread schedule with Qemu emulator)
+
 
 \end{document}
