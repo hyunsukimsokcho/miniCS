@@ -1,11 +1,11 @@
 # Evaluate
 
 소스코드의 파일명과 락이 걸리는 줄의 위치를 입력으로 받아서 감지되는 data race의 개수와 락 사이에 실행되는 machine instruction의 개수를 return 한다.
-파라미터와 return 방법에 대해서는 추가적인 논의 필요.
+**파라미터와 return 방법에 대해서는 추가적인 논의 필요.**
 
 ## 파일 설명
-evaluate.cpp : int evaluate(*filename)을 사용하여 evaluate의 수행이 가능하다.
-script.py : gdb를 이용하여 machine instruction의 개수를 count한다.
+- evaluate.cpp : int evaluate(*filename)을 사용하여 evaluate의 수행이 가능하다.
+- script.py : gdb를 이용하여 machine instruction의 개수를 count한다.
 
 ## 실행 방법
 1. evaluate.cpp와 test할 파일을 같은 위치에 두고
