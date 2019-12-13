@@ -2,7 +2,7 @@
 
 # miniCS
 
-### The goal of this project is minimising critical section in concurrent programming by applying heuristics. (e.g. GA) 
+### The goal of this project is to minimize critical section in concurrent programming by applying heuristics. (e.g. GA) 
 It is usually known that there is no gold standard for setting critical sections. (i.e. when to acquire lock, then when to release the lock) 
 We may need to tackle some intractability such as combinatorically explosive cases due to nondeterministic thread interleaving.
 
@@ -18,3 +18,9 @@ We may need to tackle some intractability such as combinatorically explosive cas
 **[29 Nov]** Used Clang AST to find scopes.
 
 **[1 Dec]** Generated all candidates to place a lock.
+
+**[9 Dec]** ThreadSanitizer error message parser.
+
+**[11 Dec]** Started writing GA.
+
+**[13 Dec]** Wrote *abstract* and *population generation*.

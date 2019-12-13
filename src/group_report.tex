@@ -1,17 +1,20 @@
-\documentclass[sigchi]{acmart}
+\documentclass[sigconf]{acmart}
 \usepackage{graphicx}
 \usepackage{comment}
 \usepackage{float}
 \usepackage{kotex}
+\usepackage{minted}
+
+\newenvironment{cpp}
+  {\VerbatimEnvironment
+   \begin{minted}[frame=lines, linenos]{c++}}
+  {\end{minted}}
 
 \copyrightyear{2019}
 \acmYear{2019}
 \setcopyright{rightsretained}
 
 \acmConference{CS454 AI Based Software Engineering}{November 1st, 2019}{KAIST, South Korea}
-\acmDOI{10.1145/3306307.3328180}
-\acmISBN{978-1-4503-6317-4/19/07}
-\acmBooktitle{CS454 AI Based Software Engineering, November 1st, 2019, KAIST, South Korea}
 \begin{document}
 
 \title{MiniCS: Critical Section Minimisation in Concurrent Programming}
@@ -41,7 +44,7 @@
   \institution{KAIST}
   \city{Daejeon, Rep. of Korea}
 }
-\email{cjm98@kaist.ac.kr}
+\email{jmchoi98@kaist.ac.kr}
 
 \author{Heeju Wi}
 \affiliation{
@@ -51,7 +54,7 @@
 \email{bb0711@kaist.ac.kr}
 
 \begin{abstract}
-As the era of artificial intelligence, machines consume massive amount of data and drastic amount of computations. Most programmers often feel fear from multi-threaded code due to its nondeterministic behavior. In order to tame the parallelism with scalability, using synchoronization primitives such as lock and semaphore is necessary to avoid race conditions. However, it is usually known that there is no gold standard for setting critical sections. (i.e. when to acquire lock, then when to release the lock) In this work, we tackle such intractability by applying heuristics.
+Modern machines consume massive amount of data as well as drastic amount of computations, as the era of artificial intelligence. In hardware manufacturing industry, developing SoC optimized to such computations is already on-going process. Multi-core with machines are prevalent thesedays. Still, thanks to Moore's law and Dennard's scaling, software implementation that synchronizes multiple threads is unavoidable to achieve reasonably scalable computing. However, it is often a fear to write multi-threaded code due to its nondeterministic behavior. In order to tame the parallelism with scalability, using synchronization primitives such as lock and semaphore is mandatory to prevent race conditions. While which API to use is rather trivial, it is usually known that setting critical sections (when to acquire lock, then when to release the lock) is not trivial at all. In this work, we tackle such intractability by applying combination of heuristics for search and static analysis for rigorous evaluation and correctness.
 \end{abstract}
 
 \maketitle
@@ -62,7 +65,94 @@ Here is the text of your introduction.
 \subsection{Subsection Heading Here}
 Write your subsection text here.
 
+\section{Background}
+\subsection{Critical section}
+
+\subsection{Genetic algorithm}
+
+\section{Experiment design}
+
+\subsection{Gene representation}
+
+\subsection{Population generation}
+
+To keep the programs simple, we assume the following constraints:
+
+\begin{enumerate}
+    \item There are no comments, built-in functions, (TODO)
+    \item All scopes are explicitly given with curly braces. (TODO write about line breaks)
+\end{enumerate}
+
+Under these assumptions, we find a \textit{valid range} $[a, b]$, and modify the code so that a lock is held at the end of the $a$-th line and released at the end of the $b$-th line. A valid range to lock must satisfy the following four conditions:
+
+\begin{enumerate}
+    \item The range must be contained in a function.
+    \item There must be a reference to a global variable inside the range. Otherwise there would be no need to place a lock.
+    \item Every scope must either fully contain a range, or be fully contained in a range. This is to prevent a thread from holding its own lock or releasing a lock that it does not hold.
+    \item There should be no \verb|return| statement in the range. This is to prevent a thread from finishing while holding a lock.
+\end{enumerate}
+
+For example, consider the following code:
+
+\begin{cpp}
+int arr[100];
+int bar(int n)
+{
+    int x = 0;
+    for (int i = 0; i <= n; ++i)
+    {
+        arr[i] = x;
+        x+= i;
+    }
+    return arr[n];
+}
+\end{cpp}
+
+A range $[6, 7]$ is valid; in this case, we hold and release a lock right before and after executing \verb|arr[i] = i|. On the other hand, $[0, 1]$ (Holding a lock before the first line) is invalid because it is not contained in a function. $[7, 8]$ is invalid because there are no global variables. $[3, 7]$ is invalid because the scope inside the \verb|for| loop neither contains $[3, 7]$ nor is contained in $[3, 7]$. Finally, $[9, 10]$ is invalid because it contains \verb|return|.
+
+We used Clang AST to detect the references to global variables. An expression in a function refers to a global variable if there is a \verb|DeclRefExpr| node whose reference variable has a global storage:
+
+\begin{cpp}
+static StatementMatcher global_match =
+  declRefExpr(
+    to(
+      varDecl(
+        hasGlobalStorage()
+      ).bind("globalVar")
+    ),
+    hasAncestor(
+      functionDecl().bind("function")
+    )
+  ).bind("globalRef");
+\end{cpp}
+
+Next, a scope in a function is detected by a \verb|CoumpoundStmt| node:
+
+\begin{cpp}
+static StatementMatcher scope_match =
+  compoundStmt(
+    hasAncestor(
+      functionDecl().bind("function")
+    )
+  ).bind("scope");
+\end{cpp}
+
+After finding all references to global variables and all scopes, we output all possible valid ranges in the program. To generate a population, we choose zero or more valid ranges such that no two ranges with the same kind of lock do not intersect.
+
+\subsection{Mutation}
+
+\subsection{Crossover}
+
+\subsection{Static analyzer}
+
+\subsection{Fitness evaluation}
+
+\section{Evaluation}
+Research questions?
+
 \section{Conclusion}
 Write your conclusion here.
+Possible improvements (e.g. Coevolution with Thread schedule with Qemu emulator)
+
 
 \end{document}
