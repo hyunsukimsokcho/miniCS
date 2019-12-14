@@ -19,6 +19,8 @@ int evaluate(char *filename)
 	system(cmd);
 	// Write detection output on out filee
 	system("./output > out 2>&1");
+	system("gcc -pthread -static -g 1.cpp");
+	system("gdb -q -x script.py a.out");
 
 	// gdb -q -x script.py 를 통해 machine instruction 개수 가져올 예정
 	return 0;
@@ -29,6 +31,6 @@ int evaluate(char *filename)
 int main()
 {
 	char inp[20];
-	strcpy(inp, "test.cpp");
+	strcpy(inp, "1.cpp");
 	evaluate(inp);
 }
