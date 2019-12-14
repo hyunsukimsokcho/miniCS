@@ -1,0 +1,38 @@
+=>PYTHONTEX#PYGc++#default#defaultverb#0#verbatim###numbers=left##103#
+int arr[100];
+int bar(int n)
+{
+    int x = 0;
+    for (int i = 0; i <= n; ++i)
+    {
+        arr[i] = x;
+        x+= i;
+    }
+    return arr[n];
+}
+=>PYTHONTEX:SETTINGS#
+version=0.15
+outputdir=pythontex-files-group_report
+workingdir=.
+workingdirset=false
+gobble=none
+rerun=default
+hashdependencies=default
+makestderr=false
+stderrfilename=full
+keeptemps=none
+pyfuture=default
+pyconfuture=none
+pygments=true
+pygglobal=:GLOBAL||texcomments=true,style=emacs
+fvextfile=-1
+pyconbanner=none
+pyconfilename=stdin
+depythontex=false
+pygfamily=py|python|
+pygfamily=pycon|pycon|
+pygfamily=sympy|python|
+pygfamily=sympycon|pycon|
+pygfamily=pylab|python|
+pygfamily=pylabcon|pycon|
+pygfamily=PYGc++|c++|

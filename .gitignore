@@ -149,6 +149,8 @@ build/
 *.vrb
 *.xdy
 *.tdo
+*.pdf
+*.pytxcode
 
 
 ### TeX ###
