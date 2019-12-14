@@ -3,6 +3,16 @@
 소스코드의 파일명과 락이 걸리는 줄의 위치를 입력으로 받아서 감지되는 data race의 개수와 락 사이에 실행되는 machine instruction의 개수를 return 한다.
 **파라미터와 return 방법에 대해서는 추가적인 논의 필요.**
 
+## 입력 파일
+`test.cpp`, `lock_range.txt`, `test_join.cpp` 이 세 파일이 같은 위치에 있어야 함.
+`test.cpp` 는 테스트 코드.
+`lock_range.txt` 는 lock 시작, 끝 위치를 공백으로 구분하여 N줄에 기록한 파일
+`test_join.txt`는 `test.cpp`에 `pthread_join`을 추가한 코드.
+
+## 출력 형식
+`A B` ( 두 정수가 공백으로 구분되어 표준 출력으로 출력됨 )
+`A`는 data race 개수, `B`는 critical region에서 실행된 machine instruction 갯수
+
 ## 파일 설명
 - evaluate.cpp : int evaluate(*filename)을 사용하여 evaluate의 수행이 가능하다.
 - script.py : gdb를 이용하여 machine instruction의 개수를 count한다.
