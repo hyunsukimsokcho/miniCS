@@ -150,6 +150,7 @@ build/
 *.xdy
 *.tdo
 *.pdf
+*.pytxcode
 
 
 ### TeX ###
