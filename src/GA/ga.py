@@ -39,9 +39,3 @@ if __name__ == "__main__":
 	lock_gene = pool.get_best()
 	
 	print(lock_gene)
-
-	
-
-
-
-
