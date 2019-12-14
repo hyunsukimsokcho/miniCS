@@ -133,8 +133,6 @@ int main()
     printf("Done with chopsticks array: %d %d %d %d %d\n",chopsticks[0], chopsticks[1],chopsticks[2],chopsticks[3],chopsticks[4]);
     return 0;
 
-    
-    
 }
 // pthread_mutex_init(&mutex_lock, NULL);
 // pthread_mutex_lock(&mutex_lock);
