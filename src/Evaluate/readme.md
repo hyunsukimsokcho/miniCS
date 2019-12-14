@@ -1,7 +1,6 @@
 # Evaluate
 
 소스코드의 파일명과 락이 걸리는 줄의 위치를 입력으로 받아서 감지되는 data race의 개수와 락 사이에 실행되는 machine instruction의 개수를 return 한다.
-**파라미터와 return 방법에 대해서는 추가적인 논의 필요.**
 
 ## 입력 파일
 `test.cpp`, `lock_range.txt`, `test_join.cpp` 이 세 파일이 같은 위치에 있어야 함.
@@ -17,11 +16,13 @@
 ## 파일 설명
 - evaluate.cpp : 컴파일 후 실행시 evaluate의 수행이 가능하다.
 - gdb_script.py : gdb를 이용하여 machine instruction의 개수를 count한다.
+- race_set_parser.py : race_set.txt를 parsing하여 racing 하는 쌍의 개수를 return 하는 parse() 함수가 구현되었다.
 
 ## 실행 방법
 1. evaluate.cpp와 test할 파일을 같은 위치에 두고
 2. ```g++ evaluate.cpp``` ```./a.out```을 실행한다.
 (단, clang이 깔려 있어야하며 ```sudo apt install clang```을 실행할 시 문제없이 작동함을 확인하였다.)
+(race_set.txt의 경우 다른 main 함수에 대해 계속 내용이 append 되기 때문에 evaluate를 수행할 때 미리 GA 단계에서 초기화 시켜주어야 한다.)
 
 ## 실행 후 생성되는 파일
 - race_detect : 특정 코드(test.cpp)에 대한 data race detection을 수행한다. ./race_detect으로 실행하면 race_detection.txt 파일을 생성
