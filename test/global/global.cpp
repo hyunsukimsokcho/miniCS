@@ -2,11 +2,7 @@
  copy global stucture(which consist of int and string).
  combine global and local variable.
 */
-
-#include <stdio.h>  
-#include <pthread.h>
-#include <string.h>
-
+#include "global.h"
 
 pthread_mutex_t mutex_lock;
 struct people
@@ -26,18 +22,18 @@ struct people parr[] = {
 };
 
 struct people picked;
-void copy_people(struct people *from, struct people *to);
-void modify_name(struct people * p);
 
 int a = 1;
 int b = 1;
 int c = 1;
 int d = 1;
+
 int copy_cnt =0;
 
 void * thread1(void *n)
 {
     int local_var1 = 1000;
+    
     //pthread_mutex_lock(&mutex_lock); /* lock case 1 */
     for (int j=0; j < 10; j++)
     {
@@ -54,12 +50,14 @@ void * thread1(void *n)
         copy_people(&parr[0], &picked);
         
     }
+    copy_cnt += 10;
 
     local_var1 += d; /* using global var*/
     
 }
 void * thread2(void *n)
 {
+    int local_var2 = 1000;
     //pthread_mutex_lock(&mutex_lock); /* lock case 1 */
     for (int j=0; j < 10; j++)
     {
@@ -72,6 +70,9 @@ void * thread2(void *n)
         copy_people(&parr[1], &picked);
         
     }
+    copy_cnt += 10;
+
+    local_var2 += 2;
     
 }
 
@@ -83,6 +84,8 @@ void * thread3(void *n)
         copy_people(&parr[2], &picked);
         
     }
+    copy_cnt += 10;
+    
     //pthread_mutex_lock(&mutex_lock); /* lock case 1 */
     modify_name(&picked);
     //pthread_mutex_unlock(&mutex_lock); /* lock case 1 */
@@ -100,7 +103,6 @@ void copy_people(struct people * from, struct people * to)
     strcpy(to->department, from->department);
     to->place = from->place;
 
-    printf("thread %d, id %d\n", to->number, picked.number);
     //pthread_mutex_unlock(&mutex_lock); /* lock case 1 */
 
     
@@ -111,34 +113,4 @@ void modify_name(struct people * picked)
     char* temp=&picked->first[2];
     char* reduced_temp = &temp[1];
 
-    printf("%s\n", temp);
 }
-
-int main()
-{
-    pthread_mutex_init(&mutex_lock, NULL);
-    int threadId;
-    
-    pthread_t pthread[3];
-    
-
-    pthread_create(&pthread[0], NULL, thread1, NULL);
-    pthread_create(&pthread[1], NULL, thread2, NULL);
-    pthread_create(&pthread[2], NULL, thread3, NULL);
-    
-
-    for (int i =0; i<3; i++)
-    {
-        pthread_join(pthread[i], NULL);
-    }
-    
-    
-    return 0;
-
-    
-    
-}
-// pthread_mutex_init(&mutex_lock, NULL);
-// pthread_mutex_lock(&mutex_lock);
-// pthread_mutex_unlock(&mutex_lock);
-// pthread_mutex_destory(pthread_mutex_t *mutex);

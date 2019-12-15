@@ -2,7 +2,7 @@ import subprocess
 import re
 
 # generate exec file
-s = subprocess.check_call('gcc -o ./gs global_structure.c -lpthread', shell = True) 
+s = subprocess.check_call('g++ -o ./gs global_main1.cpp global.cpp -lpthread', shell = True) 
 if s!=0:
     print("Error in making exec file")
 else:
