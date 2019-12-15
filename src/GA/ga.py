@@ -1,4 +1,5 @@
 import os
+import subprocess
 import argparse
 import math
 import random
@@ -7,11 +8,12 @@ import itertools
 from copy import deepcopy
 from datetime import datetime
 import re
-import gen_pool
+from GenPool import GenPool
+from eval import convert_to_multi_threaded_code
 
-def read_script(path):
+def read_script(filename):
 	lock_candidates = []
-	with open(args.script, 'r') as script:
+	with open(filename, 'r') as script:
 		for line in script:
 			if re.search('[a-zA-Z]', line):
 				# Ignore meta information
@@ -21,21 +23,27 @@ def read_script(path):
 	return lock_candidates
 
 
-
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
-	parser.add_argument("script", type=str)
 	parser.add_argument("src", type=str)
 	args = parser.parse_args()
 
-	assert args.script
+	assert args.src
 
-	lock_candidates = read_script(args.script)
-	offset = datetime.now().isoformat()
-	# Generate src files under ${datetime.now()} directory
-	os.mkdir(offset)
-
-	pool = gen_pool.GenPool(16, 100, args.src, offset, lock_candidates)
-	lock_gene = pool.get_best()
+	with open('a.txt', 'w') as f:
+		subprocess.call(['../GlobalVarFinder/gm', args.src], stdout=f)
 	
-	print(lock_gene)
+	lock_candidates = read_script('a.txt')
+
+	pool = GenPool(16, 100, args.src, lock_candidates)
+	best_gene = pool.get_best()
+	
+	print(best_gene)
+
+	# Generate src files under ${datetime.now()} directory
+	offset = datetime.now().isoformat()
+	os.mkdir(offset)
+	with open(args.src, 'r') as f:
+		text = convert_to_multi_threaded_code(f, best_gene)
+		with open(offset + '/1.cpp', 'w') as f2:
+			f2.write(text)
