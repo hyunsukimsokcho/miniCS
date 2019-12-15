@@ -3,14 +3,10 @@
  combine global and local variable.
 */
 
-#include <stdio.h>  
-#include <pthread.h>
-#include <string.h>
 #include "global.h"
 
 int main()
 {
-    extern pthread_mutex_t mutex_lock;
     pthread_mutex_init(&mutex_lock, NULL);
     int threadId;
     

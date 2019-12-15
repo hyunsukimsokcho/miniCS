@@ -3,7 +3,22 @@
  combine global and local variable.
 */
 
-#include "global.h"
+#include <stdio.h>  
+#include <pthread.h>
+#include <string.h>
+
+void * thread1(void *n);
+
+void * thread2(void *n);
+
+void * thread3(void *n);
+
+
+void copy_people(struct people * from, struct people * to);
+
+void modify_name(struct people * picked);
+
+pthread_mutex_t mutex_lock;
 
 struct people
 {
@@ -113,4 +128,28 @@ void modify_name(struct people * picked)
     char* temp=&picked->first[2];
     char* reduced_temp = &temp[1];
 
+}
+
+
+int main()
+{
+    pthread_mutex_init(&mutex_lock, NULL);
+    int threadId;
+    
+    pthread_t pthread[3];
+    
+
+    pthread_create(&pthread[0], NULL, thread1, NULL);
+    pthread_create(&pthread[2], NULL, thread2, NULL);
+    pthread_create(&pthread[1], NULL, thread3, NULL);
+    
+
+    for (int i =0; i<3; i++)
+    {
+        pthread_join(pthread[i], NULL);
+    }
+    
+    
+    return 0;
+    
 }

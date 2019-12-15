@@ -42,9 +42,14 @@ class GenPool:
 		self.best = []
 
 	def get_best(self):
+		n = self.iteration // 100
 		for i in range(self.iteration):
 			self.selection()
-		return self.best
+
+			if i%n == n-1:
+				print("{}% clear!".format(i/n))
+
+		return self.best, get_score(self.src, self.best)
 
 	def tournament_selection(self):
 		K = self.population // 4

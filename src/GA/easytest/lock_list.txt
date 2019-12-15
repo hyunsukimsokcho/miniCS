@@ -1,0 +1,61 @@
+Function __uint16_identity contains a scope 34:1 --- 36:1
+Return statement in line 35
+Function __uint32_identity contains a scope 40:1 --- 42:1
+Return statement in line 41
+Function __uint64_identity contains a scope 46:1 --- 48:1
+Return statement in line 47
+Function  contains a scope 67:9 --- 67:9
+Function __pthread_cleanup_class contains a scope 561:67 --- 561:69
+Function ~__pthread_cleanup_class contains a scope 562:31 --- 562:79
+Function __setdoit contains a scope 563:33 --- 563:55
+Function __defer contains a scope 564:19 --- 565:26
+Function __restore contains a scope 566:27 --- 566:71
+Function thread1 contains a scope 16:1 --- 26:1
+Function thread1 contains a scope 20:5 --- 24:5
+Function thread1 refers to global cnt at 21:33
+Function thread1 refers to global cnt at 22:9
+Function thread2 contains a scope 29:1 --- 40:1
+Function thread2 contains a scope 33:5 --- 38:5
+Function thread2 refers to global cnt at 35:33
+Function thread2 refers to global cnt at 36:9
+Function main refers to global mutex_lock at 45:25
+Function main refers to global cnt at 51:5
+Return statement in line 59
+16 24
+16 25
+17 24
+17 25
+18 24
+18 25
+20 21
+20 22
+20 23
+21 22
+21 23
+42 45
+43 45
+44 45
+48 51
+48 52
+48 53
+48 54
+48 55
+48 56
+48 57
+48 58
+49 51
+49 52
+49 53
+49 54
+49 55
+49 56
+49 57
+49 58
+50 51
+50 52
+50 53
+50 54
+50 55
+50 56
+50 57
+50 58

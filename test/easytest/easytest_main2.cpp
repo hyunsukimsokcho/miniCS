@@ -1,14 +1,9 @@
 /* test using  */
 
-#include <stdio.h>  
-
 #include "easytest.h"
 
 int main()
 {
-    extern int cnt;
-    extern pthread_mutex_t mutex_lock;
-    
     pthread_mutex_init(&mutex_lock, NULL);
     int threadId;
     pthread_t pthread[2];

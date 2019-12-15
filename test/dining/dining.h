@@ -10,7 +10,6 @@ lock case 2: lock for global function => only 2 locks are needed.
 #include <pthread.h>
 #include <time.h>
 
-
 void get_chopstick(int p);
 void put_chopstick(int p);
 void eat(int p);
@@ -27,3 +26,13 @@ void get_chopstick(int p);
 void put_chopstick(int p);
 
 void eat(int p);
+
+#define N 5     /* number of philosophers */
+#define UNUSING 0
+#define USING 1
+#define LEFT(i) (i+N-1)%N
+#define RIGHT(i) (i)%N
+#define SEC_NSEC 1000000000LL 
+
+pthread_mutex_t mutex_lock;
+int chopsticks[N] = {UNUSING, };
