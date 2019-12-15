@@ -1,0 +1,67 @@
+\subsection{Population generation}
+
+To keep the programs simple, we assume the following constraints:
+
+\begin{enumerate}
+    \item There are no comments, built-in functions, (TODO)
+    \item All scopes are explicitly given with curly braces. (TODO write about line breaks)
+\end{enumerate}
+
+Under these assumptions, we find a \textit{valid range} $[a, b]$, and modify the code so that a lock is held at the end of the $a$-th line and released at the end of the $b$-th line. A valid range to lock must satisfy the following four conditions:
+
+\begin{enumerate}
+    \item The range must be contained in a function.
+    \item There must be a reference to a global variable inside the range. Otherwise there would be no need to place a lock.
+    \item Every scope must either fully contain a range, or be fully contained in a range. This is to prevent a thread from holding its own lock or releasing a lock that it does not hold.
+    \item There should be no \verb|return| statement in the range. This is to prevent a thread from finishing while holding a lock.
+\end{enumerate}
+
+For example, consider the following code:
+
+
+\begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left]
+int arr[100];
+int bar(int n)
+{
+    int x = 0;
+    for (int i = 0; i <= n; ++i)
+    {
+        arr[i] = x;
+        x+= i;
+    }
+    return arr[n];
+}
+\end{lstlisting}
+
+A range $[6, 7]$ is valid; in this case, we hold and release a lock right before and after executing \verb|arr[i] = i|. On the other hand, $[0, 1]$ (Holding a lock before the first line) is invalid because it is not contained in a function. $[7, 8]$ is invalid because there are no global variables. $[3, 7]$ is invalid because the scope inside the \verb|for| loop neither contains $[3, 7]$ nor is contained in $[3, 7]$. Finally, $[9, 10]$ is invalid because it contains \verb|return|.
+
+We used Clang AST to detect the references to global variables. An expression in a function refers to a global variable if there is a \verb|DeclRefExpr| node whose reference variable has a global storage:
+
+\begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left]
+static StatementMatcher global_match =
+  declRefExpr(
+    to(
+      varDecl(
+        hasGlobalStorage()
+      ).bind("globalVar")
+    ),
+    hasAncestor(
+      functionDecl().bind("function")
+    )
+  ).bind("globalRef");
+  \end{lstlisting}
+
+
+Next, a scope in a function is detected by a \verb|CoumpoundStmt| node:
+
+\begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left]
+static StatementMatcher scope_match =
+  compoundStmt(
+    hasAncestor(
+      functionDecl().bind("function")
+    )
+  ).bind("scope");
+  \end{lstlisting}
+
+
+After finding all references to global variables and all scopes, we output all possible valid ranges in the program. To generate a population, we choose zero or more valid ranges such that no two ranges with the same kind of lock do not intersect.
