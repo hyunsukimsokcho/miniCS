@@ -9,7 +9,7 @@ from copy import deepcopy
 from datetime import datetime
 import re
 from GenPool import GenPool
-from eval import convert_to_multi_threaded_code
+from eval import convert_to_multi_threaded_code, use_eval
 
 def read_script(filename):
 	lock_candidates = []
@@ -44,6 +44,8 @@ def write_answer(src):
 	
 	print(best_gene)
 	print(score)
+
+	use_eval(os.path.join(src, '0.cpp'), best_gene)
 
 	# Generate src files under ${datetime.now()} directory
 	offset = datetime.now().isoformat()

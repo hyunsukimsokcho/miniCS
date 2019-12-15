@@ -1,85 +1,105 @@
 ==================
-WARNING: ThreadSanitizer: data race (pid=195)
+WARNING: ThreadSanitizer: data race (pid=9955)
   Write of size 4 at 0x0000014ca9e8 by thread T2:
-    #0 myThreadFun(void*) /home/ehdkacjswo/lock/test.cpp:22 (race_detect+0x4b86fd)
+    #0 myThreadFun(void*) /home/ehdkacjswo/lock/test.cpp:22:5 (race_detect+0x4b86fd)
 
   Previous write of size 4 at 0x0000014ca9e8 by thread T1:
-    #0 myThreadFun(void*) /home/ehdkacjswo/lock/test.cpp:22 (race_detect+0x4b86fd)
+    #0 myThreadFun(void*) /home/ehdkacjswo/lock/test.cpp:22:5 (race_detect+0x4b86fd)
 
-  Location is global '<null>' at 0x000000000000 (race_detect+0x0000014ca9e8)
+  Location is global 'myThreadFun(void*)::s' of size 4 at 0x0000014ca9e8 (race_detect+0x0000014ca9e8)
 
-  Thread T2 (tid=198, running) created by main thread at:
-    #0 pthread_create ??:? (race_detect+0x426ff6)
-    #1 main /home/ehdkacjswo/lock/test.cpp:40 (race_detect+0x4b8777)
+  Thread T2 (tid=9958, running) created by main thread at:
+    #0 pthread_create <null> (race_detect+0x426ff6)
+    #1 main /home/ehdkacjswo/lock/test.cpp:40:9 (race_detect+0x4b8777)
 
-  Thread T1 (tid=197, finished) created by main thread at:
-    #0 pthread_create ??:? (race_detect+0x426ff6)
-    #1 main /home/ehdkacjswo/lock/test.cpp:40 (race_detect+0x4b8765)
+  Thread T1 (tid=9957, finished) created by main thread at:
+    #0 pthread_create <null> (race_detect+0x426ff6)
+    #1 main /home/ehdkacjswo/lock/test.cpp:40:9 (race_detect+0x4b8765)
 
-SUMMARY: ThreadSanitizer: data race /home/ehdkacjswo/lock/test.cpp:22 in myThreadFun(void*)
+SUMMARY: ThreadSanitizer: data race /home/ehdkacjswo/lock/test.cpp:22:5 in myThreadFun(void*)
 ==================
 ==================
-WARNING: ThreadSanitizer: data race (pid=195)
+WARNING: ThreadSanitizer: data race (pid=9955)
   Write of size 4 at 0x0000014ca9b8 by thread T2:
-    #0 myThreadFun(void*) /home/ehdkacjswo/lock/test.cpp:23 (race_detect+0x4b8716)
+    #0 myThreadFun(void*) /home/ehdkacjswo/lock/test.cpp:23:5 (race_detect+0x4b8716)
 
   Previous write of size 4 at 0x0000014ca9b8 by thread T1:
-    #0 myThreadFun(void*) /home/ehdkacjswo/lock/test.cpp:23 (race_detect+0x4b8716)
+    #0 myThreadFun(void*) /home/ehdkacjswo/lock/test.cpp:23:5 (race_detect+0x4b8716)
 
-  Location is global '<null>' at 0x000000000000 (race_detect+0x0000014ca9b8)
+  Location is global 'g' of size 4 at 0x0000014ca9b8 (race_detect+0x0000014ca9b8)
 
-  Thread T2 (tid=198, running) created by main thread at:
-    #0 pthread_create ??:? (race_detect+0x426ff6)
-    #1 main /home/ehdkacjswo/lock/test.cpp:40 (race_detect+0x4b8777)
+  Thread T2 (tid=9958, running) created by main thread at:
+    #0 pthread_create <null> (race_detect+0x426ff6)
+    #1 main /home/ehdkacjswo/lock/test.cpp:40:9 (race_detect+0x4b8777)
 
-  Thread T1 (tid=197, finished) created by main thread at:
-    #0 pthread_create ??:? (race_detect+0x426ff6)
-    #1 main /home/ehdkacjswo/lock/test.cpp:40 (race_detect+0x4b8765)
+  Thread T1 (tid=9957, finished) created by main thread at:
+    #0 pthread_create <null> (race_detect+0x426ff6)
+    #1 main /home/ehdkacjswo/lock/test.cpp:40:9 (race_detect+0x4b8765)
 
-SUMMARY: ThreadSanitizer: data race /home/ehdkacjswo/lock/test.cpp:23 in myThreadFun(void*)
+SUMMARY: ThreadSanitizer: data race /home/ehdkacjswo/lock/test.cpp:23:5 in myThreadFun(void*)
 ==================
 ==================
-WARNING: ThreadSanitizer: data race (pid=195)
+WARNING: ThreadSanitizer: data race (pid=9955)
   Write of size 4 at 0x0000014ca9bc by thread T2:
-    #0 myThreadFun(void*) /home/ehdkacjswo/lock/test.cpp:24 (race_detect+0x4b872f)
+    #0 myThreadFun(void*) /home/ehdkacjswo/lock/test.cpp:24:5 (race_detect+0x4b872f)
 
   Previous write of size 4 at 0x0000014ca9bc by thread T1:
-    #0 myThreadFun(void*) /home/ehdkacjswo/lock/test.cpp:24 (race_detect+0x4b872f)
+    #0 myThreadFun(void*) /home/ehdkacjswo/lock/test.cpp:24:5 (race_detect+0x4b872f)
 
-  Location is global '<null>' at 0x000000000000 (race_detect+0x0000014ca9bc)
+  Location is global 'a' of size 4 at 0x0000014ca9bc (race_detect+0x0000014ca9bc)
 
-  Thread T2 (tid=198, running) created by main thread at:
-    #0 pthread_create ??:? (race_detect+0x426ff6)
-    #1 main /home/ehdkacjswo/lock/test.cpp:40 (race_detect+0x4b8777)
+  Thread T2 (tid=9958, running) created by main thread at:
+    #0 pthread_create <null> (race_detect+0x426ff6)
+    #1 main /home/ehdkacjswo/lock/test.cpp:40:9 (race_detect+0x4b8777)
 
-  Thread T1 (tid=197, finished) created by main thread at:
-    #0 pthread_create ??:? (race_detect+0x426ff6)
-    #1 main /home/ehdkacjswo/lock/test.cpp:40 (race_detect+0x4b8765)
+  Thread T1 (tid=9957, finished) created by main thread at:
+    #0 pthread_create <null> (race_detect+0x426ff6)
+    #1 main /home/ehdkacjswo/lock/test.cpp:40:9 (race_detect+0x4b8765)
 
-SUMMARY: ThreadSanitizer: data race /home/ehdkacjswo/lock/test.cpp:24 in myThreadFun(void*)
+SUMMARY: ThreadSanitizer: data race /home/ehdkacjswo/lock/test.cpp:24:5 in myThreadFun(void*)
 ==================
 ==================
-WARNING: ThreadSanitizer: thread leak (pid=195)
-  Thread T1 (tid=197, finished) created by main thread at:
-    #0 pthread_create ??:? (race_detect+0x426ff6)
-    #1 main /home/ehdkacjswo/lock/test.cpp:40 (race_detect+0x4b8765)
+WARNING: ThreadSanitizer: data race (pid=9955)
+  Write of size 4 at 0x0000014ca9b8 by thread T3:
+    #0 myThreadFun(void*) /home/ehdkacjswo/lock/test.cpp:23:5 (race_detect+0x4b8716)
 
-SUMMARY: ThreadSanitizer: thread leak ??:? in __interceptor_pthread_create
-==================
-==================
-WARNING: ThreadSanitizer: thread leak (pid=195)
-  Thread T2 (tid=198, finished) created by main thread at:
-    #0 pthread_create ??:? (race_detect+0x426ff6)
-    #1 main /home/ehdkacjswo/lock/test.cpp:40 (race_detect+0x4b8777)
+  Previous write of size 4 at 0x0000014ca9b8 by thread T1:
+    #0 myThreadFun(void*) /home/ehdkacjswo/lock/test.cpp:23:5 (race_detect+0x4b8716)
 
-SUMMARY: ThreadSanitizer: thread leak ??:? in __interceptor_pthread_create
-==================
-==================
-WARNING: ThreadSanitizer: thread leak (pid=195)
-  Thread T3 (tid=199, finished) created by main thread at:
-    #0 pthread_create ??:? (race_detect+0x426ff6)
-    #1 main /home/ehdkacjswo/lock/test.cpp:40 (race_detect+0x4b8789)
+  Location is global 'g' of size 4 at 0x0000014ca9b8 (race_detect+0x0000014ca9b8)
 
-SUMMARY: ThreadSanitizer: thread leak ??:? in __interceptor_pthread_create
+  Thread T3 (tid=9959, running) created by main thread at:
+    #0 pthread_create <null> (race_detect+0x426ff6)
+    #1 main /home/ehdkacjswo/lock/test.cpp:40:9 (race_detect+0x4b8789)
+
+  Thread T1 (tid=9957, finished) created by main thread at:
+    #0 pthread_create <null> (race_detect+0x426ff6)
+    #1 main /home/ehdkacjswo/lock/test.cpp:40:9 (race_detect+0x4b8765)
+
+SUMMARY: ThreadSanitizer: data race /home/ehdkacjswo/lock/test.cpp:23:5 in myThreadFun(void*)
 ==================
-ThreadSanitizer: reported 6 warnings
+==================
+WARNING: ThreadSanitizer: thread leak (pid=9955)
+  Thread T1 (tid=9957, finished) created by main thread at:
+    #0 pthread_create <null> (race_detect+0x426ff6)
+    #1 main /home/ehdkacjswo/lock/test.cpp:40:9 (race_detect+0x4b8765)
+
+SUMMARY: ThreadSanitizer: thread leak (/mnt/c/Users/jaeminYu/Documents/GitHub/miniCS/src/Evaluate/race_detect+0x426ff6) in __interceptor_pthread_create
+==================
+==================
+WARNING: ThreadSanitizer: thread leak (pid=9955)
+  Thread T2 (tid=9958, finished) created by main thread at:
+    #0 pthread_create <null> (race_detect+0x426ff6)
+    #1 main /home/ehdkacjswo/lock/test.cpp:40:9 (race_detect+0x4b8777)
+
+SUMMARY: ThreadSanitizer: thread leak (/mnt/c/Users/jaeminYu/Documents/GitHub/miniCS/src/Evaluate/race_detect+0x426ff6) in __interceptor_pthread_create
+==================
+==================
+WARNING: ThreadSanitizer: thread leak (pid=9955)
+  Thread T3 (tid=9959, finished) created by main thread at:
+    #0 pthread_create <null> (race_detect+0x426ff6)
+    #1 main /home/ehdkacjswo/lock/test.cpp:40:9 (race_detect+0x4b8789)
+
+SUMMARY: ThreadSanitizer: thread leak (/mnt/c/Users/jaeminYu/Documents/GitHub/miniCS/src/Evaluate/race_detect+0x426ff6) in __interceptor_pthread_create
+==================
+ThreadSanitizer: reported 7 warnings

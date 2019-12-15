@@ -64,7 +64,7 @@ bool read_error()
 void data_race()
 {	
 	// Create race detection executable for test.cpp
-	system("clang test.cpp -fsanitize=thread -O2 -g -o race_detect");
+	system("clang test.cpp -fsanitize=thread -O2 -g -o -lpthread race_detect");
 	
 	// Write detection output on race.txt file
 	system("./race_detect > race_detection.txt 2>&1");

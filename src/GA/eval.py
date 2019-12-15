@@ -55,7 +55,7 @@ def convert_to_join_threaded_code(lines):
 	return ''.join(ret)
 
 def use_eval(filename, lock_gene):
-	with open(full_filename, 'r') as input_f:
+	with open(filename, 'r') as input_f:
 		code_w_lock = convert_to_multi_threaded_code(input_f, lock_gene)
 		code_w_join = convert_to_join_threaded_code(code_w_lock)
 		with open('../Evaluate/test.cpp', 'w') as f:
@@ -66,12 +66,13 @@ def use_eval(filename, lock_gene):
 			f.write(''.join(code_w_join))
 		with open('../Evaluate/lock_range.txt', 'w') as f:
 			for lock in lock_gene:
-				print("{} {}".format(lock[0], lock[1]))
+				f.write("{} {}\n".format(lock[0], lock[1]))
 		with open('../Evaluate/race_set.txt', 'w') as f:
 			pass
 	
-	proc = subprocess.Popen(['../Evaluate/evaluate'], stdout=subprocess.PIPE)
+	proc = subprocess.Popen(['../Evaluate/evaluate'], cwd='../Evaluate/' ,stdout=subprocess.PIPE)
 	out, err = proc.communicate()
+	print("out : ")
 	print(out.decode('utf-8'))
 
 """ 

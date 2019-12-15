@@ -17,15 +17,15 @@ void * thread1(void *n)
     int i;
     //pthread_mutex_lock(&mutex_lock);
     for (i=0; i<5; i++)
+pthread_mutex_lock(&mutex_lock);
     {
         printf("thread1: %d\n", cnt);
-pthread_mutex_lock(&my_lock);
         cnt ++;
         //sleep(1);
     }
-pthread_mutex_unlock(&my_lock);
     //pthread_mutex_unlock(&mutex_lock);
 }
+pthread_mutex_unlock(&mutex_lock);
 
 void * thread2(void *n)
 {
@@ -34,9 +34,13 @@ void * thread2(void *n)
     for(i=0; i<5; i++)
     {
         
+pthread_mutex_lock(&mutex_lock);
         printf("thread2: %d\n", cnt);
         cnt ++;
+pthread_mutex_unlock(&mutex_lock);
+pthread_mutex_lock(&mutex_lock);
         //sleep(1);
+pthread_mutex_unlock(&mutex_lock);
     }
     //pthread_mutex_unlock(&mutex_lock);
 }
@@ -44,19 +48,15 @@ void * thread2(void *n)
 
 int main()
 {
-pthread_mutex_lock(&my_lock);
     pthread_mutex_init(&mutex_lock, NULL);
     int threadId;
-pthread_mutex_unlock(&my_lock);
     pthread_t pthread[2];
     int status;
     int a=1;
 
     cnt =0;
-pthread_mutex_lock(&my_lock);
     pthread_create(&pthread[0], NULL, thread1, (void *)&a);
     pthread_create(&pthread[1], NULL, thread2, (void *)&a);
-pthread_mutex_unlock(&my_lock);
     
     pthread_join(pthread[0], NULL);
     pthread_join(pthread[1], NULL);

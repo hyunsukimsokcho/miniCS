@@ -122,6 +122,7 @@ class GenPool:
 		if (gen0[i0-1][1] > gen0[i0][0]):
 			print(gen0)
 			print(gen1)
+			assert(is_intersect(gen0[i0-1], gen0[i0]))
 		x = np.random.randint(gen0[i0-1][1], gen0[i0][0]+1)
 
 		i1 = len1
