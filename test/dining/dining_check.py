@@ -23,7 +23,7 @@ def exit_func():
 Timer(8, exit_func).start()
 
 # generate exec file
-s = subprocess.check_call('gcc -o ./dp DiningP.c -lpthread', shell = True) 
+s = subprocess.check_call('g++ -o ./dp dining_main1.cpp dining.cpp -lpthread', shell = True) 
 
 # test 1: dead lock test
 if s!=0:
