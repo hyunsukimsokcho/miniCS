@@ -50,6 +50,14 @@ int source_lineno(SourceRange r,
   return ploc.getLine();
 }
 
+bool valid_funcname(std::string fn){
+  if(fn.size() >= 2 && fn[0] == '_' && fn[1] == '_')
+    return false;
+  if(fn.size() >= 3 && fn[1] == '_' && fn[2] == '_')
+    return false;
+  return fn.size() > 0 && fn != "main";
+}
+
 /* ------------------------------------------------ */
 
 // global variable reference matcher
@@ -76,7 +84,7 @@ struct GlobalVarPrinter: public clang::ast_matchers::MatchFinder::MatchCallback{
     FunctionDecl const *fd = result.Nodes.getNodeAs<FunctionDecl>("function");
     Expr const *gref = result.Nodes.getNodeAs<Expr>("globalRef");
     VarDecl const *gvar = result.Nodes.getNodeAs<VarDecl>("globalVar");
-    if(fd && gref && gvar){
+    if(fd && gref && gvar && valid_funcname(fd->getNameAsString())){
       int line = source_lineno(gref->getSourceRange(), &manager, false);
       std::cout << "Function " << fd->getNameAsString();
       std::cout << " refers to global " << gvar->getNameAsString() << " at ";
@@ -107,7 +115,7 @@ struct ScopePrinter: public clang::ast_matchers::MatchFinder::MatchCallback{
       const_cast<clang::SourceManager &>(result.Context->getSourceManager()));
     FunctionDecl const *fd = result.Nodes.getNodeAs<FunctionDecl>("function");
     CompoundStmt const *cs = result.Nodes.getNodeAs<CompoundStmt>("scope");
-    if(fd && cs && fd->getNameAsString() != "main"){
+    if(fd && cs && valid_funcname(fd->getNameAsString())){
       int line_begin = source_lineno(cs->getSourceRange(), &manager, false);
       int line_end = source_lineno(cs->getSourceRange(), &manager, true);
       std::cout << "Function " << fd->getNameAsString();
@@ -124,7 +132,11 @@ struct ScopePrinter: public clang::ast_matchers::MatchFinder::MatchCallback{
 
 // return matcher
 static StatementMatcher return_match =
-  returnStmt().bind("return");
+  returnStmt(
+    hasAncestor(
+      functionDecl().bind("function")
+    )
+  ).bind("return");
 
 // check if there is a return statement in line i
 std::vector<int> has_return;
@@ -134,8 +146,9 @@ struct ReturnPrinter: public clang::ast_matchers::MatchFinder::MatchCallback{
   virtual void run(MatchFinder::MatchResult const &result) override{
     SourceManager &manager(
       const_cast<clang::SourceManager &>(result.Context->getSourceManager()));
+    FunctionDecl const *fd = result.Nodes.getNodeAs<FunctionDecl>("function");
     ReturnStmt const *rs = result.Nodes.getNodeAs<ReturnStmt>("return");
-    if(rs){
+    if(rs && valid_funcname(fd->getNameAsString())){
       int line = source_lineno(rs->getSourceRange(), &manager, false);
       std::cout << "Return statement in line " << line << std::endl;
       add_to_vec(has_return, line, 1);
