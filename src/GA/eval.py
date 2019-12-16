@@ -65,8 +65,10 @@ def use_eval(filename, lock_gene):
 	with open('../Evaluate/test_join.cpp', 'w') as f:
 		f.write(''.join(code_w_join))
 	with open('../Evaluate/lock_range.txt', 'w') as f:
+		offset = 1
 		for lock in lock_gene:
-			f.write("{} {}\n".format(lock[0], lock[1]))
+			f.write("{} {}\n".format(lock[0] + offset, lock[1] + offset + 1))
+			offset += 2
 	
 	subprocess.call(['../Evaluate/evaluate'], cwd='../Evaluate/')
 
