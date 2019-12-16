@@ -15,12 +15,6 @@ using namespace clang::ast_matchers;
 static llvm::cl::OptionCategory toolCategory("gm options");
 static llvm::cl::extrahelp commonHelp(CommonOptionsParser::HelpMessage);
 
-// V[idx] = val, with resizing if necessary
-void add_to_vec(std::vector<int> &V, size_t idx, int val){
-  while(V.size() <= idx) V.push_back(0);
-  V[idx] = val;
-}
-
 // get the location of the source range
 std::string source_location(SourceRange r,
     SourceManager const *sm, bool use_end){
@@ -73,7 +67,7 @@ static StatementMatcher global_match =
     )
   ).bind("globalRef");
 
-// true iff the i-th line references a global variable
+// which lines reference a global variable
 std::vector<int> has_global;
 
 // find the global variable references and print them
@@ -90,7 +84,7 @@ struct GlobalVarPrinter: public clang::ast_matchers::MatchFinder::MatchCallback{
       std::cout << " refers to global " << gvar->getNameAsString() << " at ";
       std::cout << source_location(gref->getSourceRange(), &manager, false);
       std::cout << std::endl;
-      add_to_vec(has_global, line, 1);
+      has_global.push_back(line);
     }
   }
 };
@@ -105,8 +99,7 @@ static StatementMatcher scope_match =
     )
   ).bind("scope");
 
-// +1 if a scope starts at the i-th line, -1 if ends, 0 otherwise
-std::vector<int> scope_delta;
+std::vector<std::pair<int, int>> scopes;
 
 // find the scopes and print them
 struct ScopePrinter: public clang::ast_matchers::MatchFinder::MatchCallback{
@@ -122,8 +115,7 @@ struct ScopePrinter: public clang::ast_matchers::MatchFinder::MatchCallback{
       std::cout << " contains a scope ";
       std::cout << source_location(cs->getSourceRange(), &manager, true);
       std::cout << std::endl;
-      add_to_vec(scope_delta, line_begin, 1);
-      add_to_vec(scope_delta, line_end, -1);
+      scopes.push_back({line_begin, line_end});
     }
   }
 };
@@ -138,7 +130,7 @@ static StatementMatcher return_match =
     )
   ).bind("return");
 
-// check if there is a return statement in line i
+// which lines have a return statement
 std::vector<int> has_return;
 
 // find the return statements and print them
@@ -151,10 +143,37 @@ struct ReturnPrinter: public clang::ast_matchers::MatchFinder::MatchCallback{
     if(rs && valid_funcname(fd->getNameAsString())){
       int line = source_lineno(rs->getSourceRange(), &manager, false);
       std::cout << "Return statement in line " << line << std::endl;
-      add_to_vec(has_return, line, 1);
+      has_return.push_back(line);
     }
   }
 };
+
+/* ---------------------------------------------------------------- */
+
+bool valid_range(int s, int e){
+  bool global_flag = false;
+  // global reference
+  for(int x: has_global){
+    if(s < x && x <= e) global_flag = true;
+  }
+  if(!global_flag) return false;
+
+  // scope relation
+  bool contained_somewhere = false;
+  for(auto [sp, ep]: scopes){
+    if(sp <= s && e < ep) contained_somewhere = true;
+    else if(s < sp && ep <= e) continue; // contains the scope
+    else if(ep <= s || e < sp) continue; // disjoint with scope
+    else return false;
+  }
+  if(!contained_somewhere) return false;
+
+  // return
+  for(int x: has_return){
+    if(s < x && x <= e) return false;
+  }
+  return true;
+}
 
 /* ---------------------------------------------------------------- */
 
@@ -173,19 +192,9 @@ int main(int argc, const char *argv[]){
   MF.addMatcher(return_match, &rprinter);
   tool.run(newFrontendActionFactory(&MF).get());
 
-  for(size_t l = 0; l < scope_delta.size(); l++){
-    if(l+1 < scope_delta.size() && scope_delta[l+1]) continue;
-    int depth = 0;
-    for(size_t i = 0; i <= l; i++) depth+= scope_delta[i];
-    if(depth == 0) continue;
-    int start_depth = depth;
-    bool met_global = false;
-    for(size_t r = l+1; r < scope_delta.size(); r++){
-      if(r < has_return.size() && has_return[r]) break;
-      if(r < has_global.size() && has_global[r]) met_global = true;
-      depth+= scope_delta[r];
-      if(depth == 0) break;
-      if(met_global && depth == start_depth) std::cout << l << ' ' << r << std::endl;
-    }
+  int endline = -1;
+  for(auto [s, e]: scopes) endline = std::max(endline, e);
+  for(int s=1; s<=endline; s++) for(int e=s+1; e<=endline; e++){
+    if(valid_range(s, e)) std::cout << s << ' ' << e << std::endl;
   }
 }
