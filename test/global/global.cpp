@@ -2,9 +2,9 @@
  copy global stucture(which consist of int and string).
  combine global and local variable.
 */
+
 #include "global.h"
 
-pthread_mutex_t mutex_lock;
 struct people
 {
     int number;
@@ -16,9 +16,9 @@ struct people
 };
 
 struct people parr[] = {
-    {1,20150496,"heeju",'w','computerscience', 301},
-    {2,20160303,"jack",'pat','engineerdesign', 302},
-    {3,20170304,"nihao",'hi','chemical',303}
+    {1,20150496,"heeju","w","computerscience", 301},
+    {2,20160303,"jack","pat","engineerdesign", 302},
+    {3,20170304,"nihao","hi","chemical",303}
 };
 
 struct people picked;

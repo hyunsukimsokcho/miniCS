@@ -1,6 +1,6 @@
 import random
 import numpy as np
-import evaluate
+from eval import get_score
 
 def intersect_chk(arr, x):
 	for y in arr:
@@ -31,21 +31,25 @@ def random_gen(arr):
 	return ret
 
 class GenPool:
-	def __init__(self, population, iteration, src, offset, arr):
+	def __init__(self, population, iteration, src, arr):
 		if population % 2 > 0:
 			population = population + 1
 		self.population = population
 		self.iteration = iteration
 		self.src = src
-		self.offset = offset
 		self.arr = arr
 		self.pool = [random_gen(arr) for i in range(self.population)]
 		self.best = []
 
 	def get_best(self):
+		n = self.iteration // 100
 		for i in range(self.iteration):
 			self.selection()
-		return self.best
+
+			if i%n == n-1:
+				print("{}% clear!".format(i/n))
+
+		return self.best, get_score(self.src, self.best)
 
 	def tournament_selection(self):
 		K = self.population // 4
@@ -54,7 +58,7 @@ class GenPool:
 		best = 0
 		for i in range(K):
 			candidate = random.choice(self.pool)
-			score = evaluate.get_score(self.src, self.offset, candidate)
+			score = get_score(self.src, candidate)
 			if best < score:
 				best = score
 				ret = candidate
@@ -74,7 +78,7 @@ class GenPool:
 		self.pool = new_pool
 
 		for i in self.pool:
-			if evaluate.get_score(self.src, self.offset, self.best) < evaluate.get_score(self.src, self.offset, i):
+			if get_score(self.src, self.best) < get_score(self.src, i):
 				self.best = i
 
 		for i in range(self.population):
@@ -111,10 +115,14 @@ class GenPool:
 		if len0 <= 1 and len1 <= 1:
 			return (gen0, gen1)
 
-		if len0 <=1:
-			return self.crossover(gen1, gen1)
+		if len0 <= 1:
+			return self.crossover(gen1, gen0)
 
 		i0 = np.random.randint(1,len0)
+		if (gen0[i0-1][1] > gen0[i0][0]):
+			print(gen0)
+			print(gen1)
+			assert(is_intersect(gen0[i0-1], gen0[i0]))
 		x = np.random.randint(gen0[i0-1][1], gen0[i0][0]+1)
 
 		i1 = len1
@@ -126,13 +134,13 @@ class GenPool:
 		ret0 = gen0[:i0]
 		ret1 = gen1[:i1]
 
-		if i1 < len1 and is_intersect(gen0[i0-1], gen1[i1]):
-			gen0[i0-1] = merge_range(gen0[i0-1], gen1[i1])
+		if i1 < len1 and is_intersect(ret0[i0-1], gen1[i1]):
+			ret0[i0-1] = merge_range(ret0[i0-1], gen1[i1])
 			del gen1[i1]
 		ret0.extend(gen1[i1:])
 
-		if i1 > 0 and is_intersect(gen1[i1-1], gen0[i0]):
-			gen1[i1-1] = merge_range(gen1[i1-1], gen0[i0])
+		if i1 > 0 and is_intersect(ret1[i1-1], gen0[i0]):
+			ret1[i1-1] = merge_range(ret1[i1-1], gen0[i0])
 			del gen0[i0]
 		ret1.extend(gen0[i0:])
 

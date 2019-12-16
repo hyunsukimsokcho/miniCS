@@ -13,6 +13,16 @@
 `A`는 lock 사이에서 실행된 machine instruction 갯수,
 `race_set.txt` 파일은 서로 race 하는 두 라인을 공백으로 구분하여 N줄에 기록한 파일.
 
+## 입력 파일
+`test.cpp`, `lock_range.txt`, `test_join.cpp` 이 세 파일이 같은 위치에 있어야 함.
+`test.cpp` 는 테스트 코드.
+`lock_range.txt` 는 lock 시작, 끝 위치를 공백으로 구분하여 N줄에 기록한 파일
+`test_join.txt`는 `test.cpp`에 `pthread_join`을 추가한 코드.
+
+## 출력 형식
+`A B` ( 두 정수가 공백으로 구분되어 표준 출력으로 출력됨 )
+`A`는 data race 개수, `B`는 critical region에서 실행된 machine instruction 갯수
+
 ## 파일 설명
 - evaluate.cpp : 컴파일 후 실행시 evaluate의 수행이 가능하다.
 - gdb_script.py : gdb를 이용하여 machine instruction의 개수를 count한다.

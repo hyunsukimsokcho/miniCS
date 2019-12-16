@@ -52,12 +52,8 @@ void * thread1(void *n)
     //pthread_mutex_lock(&mutex_lock); /* lock case 1 */
     for (int j=0; j < 10; j++)
     {
-pthread_mutex_lock(&mutex_lock);
         a += 1;
-pthread_mutex_unlock(&mutex_lock);
-pthread_mutex_lock(&mutex_lock);
         b += 1;
-pthread_mutex_unlock(&mutex_lock);
     
     }
     //pthread_mutex_unlock(&mutex_lock); /* lock case 1 */
@@ -66,10 +62,8 @@ pthread_mutex_unlock(&mutex_lock);
 
     for(int j=0; j<10; j++)
     {
-pthread_mutex_lock(&mutex_lock);
         copy_people(&parr[0], &picked);
         
-pthread_mutex_unlock(&mutex_lock);
     }
     copy_cnt += 10;
 
@@ -82,19 +76,13 @@ void * thread2(void *n)
     //pthread_mutex_lock(&mutex_lock); /* lock case 1 */
     for (int j=0; j < 10; j++)
     {
-pthread_mutex_lock(&mutex_lock);
         b += 1;
-pthread_mutex_unlock(&mutex_lock);
-pthread_mutex_lock(&mutex_lock);
         c += 1;
-pthread_mutex_unlock(&mutex_lock);
     }
     //pthread_mutex_unlock(&mutex_lock); /* lock case 1 */
     for(int j=0; j<10; j++)
     {
-pthread_mutex_lock(&mutex_lock);
         copy_people(&parr[1], &picked);
-pthread_mutex_unlock(&mutex_lock);
         
     }
     copy_cnt += 10;
@@ -108,10 +96,8 @@ void * thread3(void *n)
     d = 3;
     for(int j=0; j<10; j++)
     {
-pthread_mutex_lock(&mutex_lock);
         copy_people(&parr[2], &picked);
         
-pthread_mutex_unlock(&mutex_lock);
     }
     copy_cnt += 10;
     
@@ -153,9 +139,9 @@ int main()
     pthread_t pthread[3];
     
 
-    pthread_create(&pthread[0], NULL, thread1, NULL);
-    pthread_create(&pthread[1], NULL, thread2, NULL);
-    pthread_create(&pthread[2], NULL, thread3, NULL);
+    pthread_create(&pthread[2], NULL, thread1, NULL);
+    pthread_create(&pthread[0], NULL, thread2, NULL);
+    pthread_create(&pthread[1], NULL, thread3, NULL);
     
 
     for (int i =0; i<3; i++)

@@ -1,9 +1,6 @@
 /* easy test for detecting race condition */
 #include "easytest.h"
 
-int cnt;
-pthread_mutex_t mutex_lock;
-
 void * thread1(void *n)
 {
     int i;
