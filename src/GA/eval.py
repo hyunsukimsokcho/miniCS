@@ -55,67 +55,60 @@ def convert_to_join_threaded_code(lines):
 	return ''.join(ret)
 
 def use_eval(filename, lock_gene):
-	with open(filename, 'r') as input_f:
-		code_w_lock = convert_to_multi_threaded_code(input_f, lock_gene)
-		code_w_join = convert_to_join_threaded_code(code_w_lock)
-		with open('../Evaluate/test.cpp', 'w') as f:
-		# with open(os.path.join(src, 'text.cpp'), 'w') as f:
-			f.write(''.join(code_w_lock))
-		with open('../Evaluate/test_join.cpp', 'w') as f:
-		# with open(os.path.join(src, 'text_join.cpp'), 'w') as f:
-			f.write(''.join(code_w_join))
-		with open('../Evaluate/lock_range.txt', 'w') as f:
-			for lock in lock_gene:
-				f.write("{} {}\n".format(lock[0], lock[1]))
-		
+	code_w_lock = []
+	code_w_join = []
+	with open(filename, 'r') as f:
+		code_w_lock = convert_to_multi_threaded_code(f, lock_gene)
+	code_w_join = convert_to_join_threaded_code(code_w_lock)
+	with open('../Evaluate/test.cpp', 'w') as f:
+		f.write(''.join(code_w_lock))
+	with open('../Evaluate/test_join.cpp', 'w') as f:
+		f.write(''.join(code_w_join))
+	with open('../Evaluate/lock_range.txt', 'w') as f:
+		for lock in lock_gene:
+			f.write("{} {}\n".format(lock[0], lock[1]))
 	
-	proc = subprocess.Popen(['../Evaluate/evaluate'], cwd='../Evaluate/' ,stdout=subprocess.PIPE)
-	out, err = proc.communicate()
-	print("out : ")
-	print(out.decode('utf-8'))
-
-""" 
-	gen is list of tuple which contains start point of lock and end point of lock. 
-	ex) [(3,4), (5,7), (8,11)]
-"""
+	subprocess.call(['../Evaluate/evaluate'], cwd='../Evaluate/')
 
 def num_inst():
-    with open('../Evaluate/num_ins.txt', 'r') as f:
-        num = f.readline()
-        return int(num)
+	with open('../Evaluate/num_ins.txt', 'r') as f:
+		num = f.readline()
+		return int(num)
 
 
 def num_race_set():
-    race_set = set()
+	race_set = set()
 
-    with open('../Evaluate/race_set.txt', 'r') as f:
-        lines = f.readlines()
+	with open('../Evaluate/race_set.txt', 'r') as f:
+		lines = f.readlines()
 
-        for line in lines:
-            pos = line.find(' ')
-            line1 = int(line[:pos])
-            line2 = int(line[pos + 1:])
+		for line in lines:
+			pos = line.find(' ')
+			line1 = int(line[:pos])
+			line2 = int(line[pos + 1:])
 
-            race_set.add((min(line1, line2), max(line1, line2)))
+			race_set.add((min(line1, line2), max(line1, line2)))
 
-    return len(race_set)
+	return len(race_set)
 
-
+""" 
+	lock_gene is list of tuple which contains start point of lock and end point of lock. 
+	ex) [(3,4), (5,7), (8,11)]
+"""
 def get_score(src, lock_gene):
 	inst = 0
-        race_set = 0
-        
-        with open('../Evaluate/race_set.txt', 'w') as f:
-            pass
+	race_set = 0
 	
-	# TODO
+	with open('../Evaluate/race_set.txt', 'w') as f:
+		pass
+
 	for filename in os.listdir(src):
 		if not os.path.splitext(filename)[0].isdigit():
 			continue 
 		full_filename = os.path.join(src, filename)
 		use_eval(full_filename, lock_gene)
-                inst += num_inst()
+		inst += num_inst()
 	
-        race_set = num_race_set()
+	race_set = num_race_set()
 
-        return (race_set, inst)
+	return (race_set, inst)
