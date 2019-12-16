@@ -1,3 +1,6 @@
+#include <pthread.h>
+pthread_mutex_t my_lock;
+
 double gg = 1234;
 int arr[100];
 bool foo(int c)
@@ -24,6 +27,7 @@ void bar()
 int a = 1, b = 2;
 int main()
 {
+    pthread_mutex_init(&my_lock, NULL);
     bar();
     int a = 1;
     int c = arr[0];

@@ -1,0 +1,91 @@
+\documentclass[sigconf]{acmart}
+\usepackage{graphicx}
+\usepackage{comment}
+\usepackage{float}
+\usepackage{kotex}
+\usepackage{listings} 
+\lstset{language=C++}
+
+\copyrightyear{2019}
+\acmYear{2019}
+\setcopyright{rightsretained}
+
+\acmConference{CS454 AI Based Software Engineering}{2019 Fall}{KAIST}
+\begin{document}
+
+\title{MiniCS: Critical Section Minimisation in Concurrent Programming}
+\author{Hyunsu Kim}
+\affiliation{
+  \institution{KAIST}
+  \city{Daejeon, Rep. of Korea}
+}
+\email{hyunsu.kim00@kaist.ac.kr}
+
+\author{Jaemin Yu}
+\affiliation{
+  \institution{KAIST}
+  \city{Daejeon, Rep. of Korea}
+}
+\email{platinant@kaist.ac.kr}
+
+\author{Doam Lee}
+\affiliation{
+  \institution{KAIST}
+  \city{Daejeon, Rep. of Korea}
+}
+\email{ehdkacjswo@kaist.ac.kr}
+
+\author{Jaemin Choi}
+\affiliation{
+  \institution{KAIST}
+  \city{Daejeon, Rep. of Korea}
+}
+\email{jmchoi98@kaist.ac.kr}
+
+\author{Heeju Wi}
+\affiliation{
+  \institution{KAIST}
+  \city{Daejeon, Rep. of Korea}
+}
+\email{bb0711@kaist.ac.kr}
+
+\begin{abstract}
+Modern machines consume massive amount of data as well as drastic amount of computations, as the era of artificial intelligence. In hardware manufacturing industry, developing SoC optimized to such computations is already on-going process. Multi-core with machines are prevalent nowadays. Still, thanks to the end of Moore's law and Dennard's scaling, software implementation that synchronizes multiple threads is unavoidable in order to achieve reasonably scalable computing. However, it is often a fear to write multi-threaded code due to its nondeterministic behavior. In order to tame the parallelism with scalability, using synchronization primitives such as lock and semaphore is mandatory to prevent race conditions. While which API to use is rather trivial, it is usually known that setting critical sections (when to acquire lock, then when to release the lock) is not trivial at all. In this work, we tackle such intractability by applying combination of heuristics for search and static analysis for rigorous evaluation and correctness.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+Here is the text of your introduction.
+
+\subsection{Subsection Heading Here}
+Write your subsection text here.
+
+\section{Background}
+\subsection{Critical section}
+
+\subsection{Genetic algorithm}
+
+\section{Experiment design}
+
+\subsection{Gene representation}
+
+\input{sections/population_generation.tex}
+
+\subsection{Mutation}
+
+\subsection{Crossover}
+
+\subsection{Static analyzer}
+
+\subsection{Fitness evaluation}
+
+\section{Evaluation}
+Research questions?
+
+\section{Conclusion}
+Write your conclusion here.
+Possible improvements (e.g. Coevolution with Thread schedule with Qemu emulator)
+
+
+\end{document}

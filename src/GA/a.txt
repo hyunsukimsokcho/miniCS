@@ -1,20 +1,44 @@
-4 6
-4 7
-4 8
-5 6
-5 7
-5 8
-6 8
-7 8
-13 21
-14 21
-16 17
-16 18
-16 19
-16 20
-17 18
-17 19
-17 20
-18 19
-18 20
+Function __uint16_identity contains a scope 34:1 --- 36:1
+Return statement in line 35
+Function __uint32_identity contains a scope 40:1 --- 42:1
+Return statement in line 41
+Function __uint64_identity contains a scope 46:1 --- 48:1
+Return statement in line 47
+Function  contains a scope 67:9 --- 67:9
+Function __pthread_cleanup_class contains a scope 561:67 --- 561:69
+Function ~__pthread_cleanup_class contains a scope 562:31 --- 562:79
+Function __setdoit contains a scope 563:33 --- 563:55
+Function __defer contains a scope 564:19 --- 565:26
+Function __restore contains a scope 566:27 --- 566:71
+Function foo contains a scope 7:1 --- 13:1
+Function foo refers to global gg at 9:13
+Function foo refers to global gg at 11:9
+Return statement in line 12
+Function bar contains a scope 16:1 --- 25:1
+Function bar contains a scope 19:5 --- 24:5
+Function bar refers to global gg at 20:9
+Function bar refers to global arr at 21:9
+Function bar refers to global arr at 22:9
+Function bar refers to global arr at 23:10
+Function main refers to global my_lock at 30:25
+Function main refers to global arr at 33:13
+7 9
+7 10
+7 11
+8 9
+8 10
+8 11
+9 11
+10 11
+16 24
+17 24
 19 20
+19 21
+19 22
+19 23
+20 21
+20 22
+20 23
+21 22
+21 23
+22 23
