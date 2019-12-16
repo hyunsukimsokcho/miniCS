@@ -96,7 +96,6 @@ int main()
 	f = fopen("num_ins.txt", "r");
 	int ins = 0;
 	if(fgets(buf, MAX_LEN, f) != NULL) ins = std::stoi(buf, nullptr);
-	printf("%d", ins);
 	
 	return 0;
 }
