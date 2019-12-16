@@ -37,89 +37,62 @@ void eat(int p);
 pthread_mutex_t mutex_lock;
 int chopsticks[N] = {UNUSING, };
 
-void * thread1(void *n)
-{
-    //pthread_mutex_lock(&mutex_lock); /* lock case 1 */
+void * thread1(void *n) {
     get_chopstick(1);
     eat(1); /* eat */
     put_chopstick(1);
-    //pthread_mutex_unlock(&mutex_lock); /* lock case 1 */
+    return NULL;
 }
-void * thread2(void *n)
-{
-    //pthread_mutex_lock(&mutex_lock); /* lock case 1 */
+void * thread2(void *n) {
     get_chopstick(2);
     eat(2); /* eat */
     put_chopstick(2);
-    //pthread_mutex_unlock(&mutex_lock); /* lock case 1 */
+    return NULL;
 }
-void * thread3(void *n)
-{
-    //pthread_mutex_lock(&mutex_lock); /* lock case 1 */
+void * thread3(void *n) {
     get_chopstick(3);
     eat(3); /* eat */
     put_chopstick(3);
-    //pthread_mutex_unlock(&mutex_lock); /* lock case 1 */
+    return NULL;
 }
-void * thread4(void *n)
-{
-    //pthread_mutex_lock(&mutex_lock); /* lock case 1 */
+void * thread4(void *n) {
     get_chopstick(4);
     eat(4); /* eat */
     put_chopstick(4);
-    //pthread_mutex_unlock(&mutex_lock); /* lock case 1 */
+    return NULL;
 }
-void * thread5(void *n)
-{
-    //pthread_mutex_lock(&mutex_lock); /* lock case 1 */
+
+void * thread5(void *n) {
     get_chopstick(5);
     eat(5); /* eat */
     put_chopstick(5);
-    //pthread_mutex_unlock(&mutex_lock); /* lock case 1 */
+    return NULL;
 }
 
-void get_chopstick(int p)
-{
-    pthread_mutex_lock(&mutex_lock); /* lock case 2 */
-    if (chopsticks[LEFT(p)] == UNUSING && chopsticks[RIGHT(p)] == UNUSING)
-    {
+void get_chopstick(int p) {
+    if (chopsticks[LEFT(p)] == UNUSING && chopsticks[RIGHT(p)] == UNUSING) {
         chopsticks[LEFT(p)] = USING;
         chopsticks[RIGHT(p)] = USING;
-        
         printf("philosopher %d: get chopstick\n", p);
     }
-    
 }
 
-void put_chopstick(int p)
-{
-    if (chopsticks[LEFT(p)] != USING || chopsticks[RIGHT(p)] != USING)
-    {
+void put_chopstick(int p) {
+    if (chopsticks[LEFT(p)] != USING || chopsticks[RIGHT(p)] != USING) {
         printf("ERROR in philosopher %d\n", p);
-    }
-    else
-    {
+    } else {
         chopsticks[LEFT(p)] = UNUSING;
         chopsticks[RIGHT(p)] = UNUSING;
         printf("philosopher %d: put chopstick\n", p);
-        pthread_mutex_unlock(&mutex_lock); /* lock case 2 */
     }
-    
 }
 
-void eat(int p)
-{
-    
-    if (chopsticks[LEFT(p)] != USING || chopsticks[RIGHT(p)] != USING)
-    {
+void eat(int p) {
+    if (chopsticks[LEFT(p)] != USING || chopsticks[RIGHT(p)] != USING) {
         printf("ERROR in philosopher %d\n", p);
-    }
-    else
-    {
-        //sleep(1);
+    } else {
         printf("philosopher %d: eating\n", p);
     }
-    
 }
 
 
