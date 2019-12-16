@@ -115,8 +115,8 @@ class GenPool:
 		if len0 <= 1 and len1 <= 1:
 			return (gen0, gen1)
 
-		if len0 <=1:
-			return self.crossover(gen1, gen1)
+		if len0 <= 1:
+			return self.crossover(gen1, gen0)
 
 		i0 = np.random.randint(1,len0)
 		if (gen0[i0-1][1] > gen0[i0][0]):

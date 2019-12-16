@@ -31,9 +31,9 @@ struct people
 };
 
 struct people parr[] = {
-    {1,20150496,"heeju",'w','computerscience', 301},
-    {2,20160303,"jack",'pat','engineerdesign', 302},
-    {3,20170304,"nihao",'hi','chemical',303}
+    {1,20150496,"heeju","w","computerscience", 301},
+    {2,20160303,"jack","pat","engineerdesign", 302},
+    {3,20170304,"nihao","hi","chemical",303}
 };
 
 struct people picked;

@@ -64,7 +64,7 @@ if __name__ == "__main__":
 	# assert args.src
 
 	# filelist = ['dining', 'easytest', 'global']
-	filelist = ['easytest']
+	filelist = ['global']
 	for src in filelist:
 		dirname = os.path.join('../../test', src)
 

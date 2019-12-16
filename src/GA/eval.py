@@ -13,12 +13,12 @@ def convert_to_multi_threaded_code(f, gene):
 	prev = 0
 	for i, tup in enumerate(gene):
 		begin, end = tup
-		while prev <= begin:
+		while prev < begin:
 			ret.append(lines[prev])
 			prev += 1
 		ret.append(LOCK_START)
 
-		while prev <= end:
+		while prev < end:
 			ret.append(lines[prev])
 			prev += 1
 		ret.append(LOCK_END)
