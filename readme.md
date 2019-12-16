@@ -23,6 +23,8 @@ We may need to tackle some intractability such as combinatorically explosive cas
 
 **[11 Dec]** Started writing GA.
 
+**[12 Dec]** Added three test cases.
+
 **[13 Dec]** Wrote *abstract* and *population generation*.
 
 **[14 Dec]** Added machine instruction counter.

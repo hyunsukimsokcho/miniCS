@@ -1,33 +1,18 @@
-Function thread1 contains a scope 16:1 --- 26:1
-Function thread1 contains a scope 20:5 --- 24:5
-Function thread1 refers to global cnt at 21:33
-Function thread1 refers to global cnt at 22:9
-Function thread2 contains a scope 29:1 --- 40:1
-Function thread2 contains a scope 33:5 --- 38:5
-Function thread2 refers to global cnt at 35:33
-Function thread2 refers to global cnt at 36:9
-16 24
-16 25
-17 24
-17 25
-18 24
-18 25
-20 21
-20 22
-20 23
-21 22
-21 23
-29 38
-29 39
-30 38
-30 39
-31 38
-31 39
-33 35
-33 36
-33 37
-34 35
-34 36
-34 37
-35 36
-35 37
+Function thread1 contains a scope 15:25 --- 22:1
+Function thread1 contains a scope 17:25 --- 20:5
+Function thread1 refers to global cnt at 18:33
+Function thread1 refers to global cnt at 19:9
+Return statement in line 21
+Function thread2 contains a scope 24:25 --- 31:1
+Function thread2 contains a scope 26:24 --- 29:5
+Function thread2 refers to global cnt at 27:33
+Function thread2 refers to global cnt at 28:9
+Return statement in line 30
+15 20
+17 18
+17 19
+18 19
+24 29
+26 27
+26 28
+27 28

@@ -68,7 +68,7 @@ void * thread1(void *n)
     copy_cnt += 10;
 
     local_var1 += d; /* using global var*/
-    
+    return NULL;
 }
 void * thread2(void *n)
 {
@@ -88,7 +88,7 @@ void * thread2(void *n)
     copy_cnt += 10;
 
     local_var2 += 2;
-    
+    return NULL;
 }
 
 void * thread3(void *n)
@@ -104,7 +104,7 @@ void * thread3(void *n)
     //pthread_mutex_lock(&mutex_lock); /* lock case 1 */
     modify_name(&picked);
     //pthread_mutex_unlock(&mutex_lock); /* lock case 1 */
-    
+    return NULL;
 }
 
 

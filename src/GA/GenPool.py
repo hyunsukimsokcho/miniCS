@@ -48,6 +48,8 @@ class GenPool:
 
 			if i%n == n-1:
 				print("{}% clear!".format(i/n))
+				print(self.best)
+				print(get_score(self.src, self.best))
 
 		return self.best, get_score(self.src, self.best)
 
@@ -55,11 +57,11 @@ class GenPool:
 		K = self.population // 4
 
 		ret = self.pool[0]
-		best = 0
+		best = (99999999, 99999999)
 		for i in range(K):
 			candidate = random.choice(self.pool)
 			score = get_score(self.src, candidate)
-			if best < score:
+			if best > score:
 				best = score
 				ret = candidate
 		return ret
