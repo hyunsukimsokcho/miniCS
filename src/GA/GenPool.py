@@ -1,20 +1,48 @@
 import random
 import numpy as np
 from eval import get_score
+from pprint import pprint
 
 def intersect_chk(arr, x):
+	"""
+		Return whether elements of arr and x intersect.
+		True: not intersect / Flase: otherwise.
+
+		Keyword Arguments:
+		arr -- list / list of locks
+		x -- tuple with size 2 (lock)
+	"""
 	for y in arr:
 		if is_intersect(x, y):
 			return True
 	return False 
 
 def is_intersect(x, y):
+	"""
+		Return whether x and y intersect.
+		True: intersects / Flase: otherwise.
+
+		Keyword Arguments:
+		x, y -- tuple with size 2 (lock)
+	"""
 	return not ((x[1] <= y[0]) or (y[1] <= x[0]))
 
 def merge_range(x, y):
+	"""
+		Return merged intervals from given two intervals
+
+		Keyword Arguments:
+		x, y -- tuple with size 2 (lock)
+	"""
 	return (min(x[0],y[0]), max(x[1],y[1]))
 
 def random_gen(arr):
+	"""
+		Return random gene.
+
+		Keyword Arguments:
+		arr -- list / list of lock candidates.
+	"""
 	prob = 0.35
 
 	arr_len = len(arr)
@@ -31,7 +59,30 @@ def random_gen(arr):
 	return ret
 
 class GenPool:
+	""" 
+		Class for GA/ 
+	
+		Fields:
+		population -- population size of GA
+		iteration -- iteration size of GA
+		src -- name of test code
+		arr -- list of lock candidates
+		pool -- list of genes
+		best -- best gene
+		best_score -- score of best gene
+		cache -- scores for genes in pool
+	"""
+
 	def __init__(self, population, iteration, src, arr):
+		"""
+			Create GenPool with given input.
+
+			Keyword argument: 
+			population	-- number / population size of GA
+			iteration	-- number / iteration size of GA
+			src			-- string / name of test code
+			arr 		-- list	/ list of lock candidates
+		"""
 		if population % 2 > 0:
 			population = population + 1
 		self.population = population
@@ -40,34 +91,56 @@ class GenPool:
 		self.arr = arr
 		self.pool = [random_gen(arr) for i in range(self.population)]
 		self.best = []
+		self.best_score = (99999999,99999999)
+		self.cache = [(0,0)] * population
 
 	def get_best(self):
-		n = self.iteration // 100
+		"""
+			Do selection, crossover and mutation for iteration size.
+			Also, prints progress of GA.
+		"""
+		n = self.iteration / 100.0
+		cnt = 0
 		for i in range(self.iteration):
 			self.selection()
 
-			if i%n == n-1:
+			if int(i/n) > cnt:
+				cnt += 1
 				print("{}% clear!".format(i/n))
 				print(self.best)
 				print(get_score(self.src, self.best))
 
-		return self.best, get_score(self.src, self.best)
+				print("pool : ")
+				pprint(self.pool)
+
+		return self.best, self.best_score
 
 	def tournament_selection(self):
+		"""
+			Do tournament selection.
+			For K random genes, pick best gene.
+		"""
 		K = self.population // 4
 
 		ret = self.pool[0]
-		best = (99999999, 99999999)
+		best = (99999999,99999999)
 		for i in range(K):
-			candidate = random.choice(self.pool)
-			score = get_score(self.src, candidate)
-			if best > score:
-				best = score
-				ret = candidate
+			idx = np.random.randint(self.population)
+			if best > self.cache[idx]:
+				best = self.cache[idx]
+				ret = self.pool[idx]
 		return ret
 
 	def selection(self):
-		# TODO
+		"""
+			Find best gene for this generation.
+			After that, do selection, crossover and mutation.
+		"""
+		for i in range(self.population):
+			self.cache[i] = get_score(self.src, self.pool[i])
+			if self.best_score > self.cache[i]:
+				self.best = self.pool[i]
+				self.best_score = self.cache[i]
 
 		new_pool = []
 		for i in range(self.population // 2):
@@ -79,9 +152,6 @@ class GenPool:
 			new_pool.append(c1)
 		self.pool = new_pool
 
-		for i in self.pool:
-			if get_score(self.src, self.best) < get_score(self.src, i):
-				self.best = i
 
 		for i in range(self.population):
 			mut_prob = random.random()
@@ -92,6 +162,12 @@ class GenPool:
 
 
 	def add_mutation(self, num):
+		"""
+			Do add mutation. Add a new lock in the gene.
+
+			Keyword Arguments:
+			num -- number / index of gene in self.pool
+		"""
 		gen = self.pool[num]
 		random.shuffle(self.arr)
 
@@ -102,12 +178,24 @@ class GenPool:
 		gen.sort()
 
 	def remove_mutation(self, num):
+		"""
+			Do delete mutation. Remove a lock in the gene.
+
+			Keyword Arguments:
+			num -- number / index of gene in self.pool
+		"""
 		gen = self.pool[num]
 		l = len(gen)
 		if l != 0:
 			del gen[np.random.randint(l)]
 
 	def crossover(self, gen0, gen1):
+		"""
+			Do crossover. Return two childs from given parents.
+
+			Keyword Arguments:
+			gen0, gen1 -- list / gene from self.pool
+		"""
 		len0 = len(gen0)
 		len1 = len(gen1)
 

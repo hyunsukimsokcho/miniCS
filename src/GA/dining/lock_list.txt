@@ -1,3 +1,31 @@
+Function thread1 contains a scope 40:25 --- 45:1
+Return statement in line 44
+Function thread2 contains a scope 46:25 --- 51:1
+Return statement in line 50
+Function thread3 contains a scope 52:25 --- 57:1
+Return statement in line 56
+Function thread4 contains a scope 58:25 --- 63:1
+Return statement in line 62
+Function thread5 contains a scope 65:25 --- 70:1
+Return statement in line 69
+Function get_chopstick contains a scope 72:27 --- 78:1
+Function get_chopstick refers to global chopsticks at 73:9
+Function get_chopstick refers to global chopsticks at 73:43
+Function get_chopstick contains a scope 73:76 --- 77:5
+Function get_chopstick refers to global chopsticks at 74:9
+Function get_chopstick refers to global chopsticks at 75:9
+Function put_chopstick contains a scope 80:27 --- 88:1
+Function put_chopstick refers to global chopsticks at 81:9
+Function put_chopstick refers to global chopsticks at 81:41
+Function put_chopstick contains a scope 81:72 --- 83:5
+Function put_chopstick contains a scope 83:12 --- 87:5
+Function put_chopstick refers to global chopsticks at 84:9
+Function put_chopstick refers to global chopsticks at 85:9
+Function eat contains a scope 90:17 --- 96:1
+Function eat refers to global chopsticks at 91:9
+Function eat refers to global chopsticks at 91:41
+Function eat contains a scope 91:72 --- 93:5
+Function eat contains a scope 93:12 --- 95:5
 72 77
 73 74
 73 75
