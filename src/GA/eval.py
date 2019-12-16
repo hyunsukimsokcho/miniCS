@@ -67,8 +67,7 @@ def use_eval(filename, lock_gene):
 		with open('../Evaluate/lock_range.txt', 'w') as f:
 			for lock in lock_gene:
 				f.write("{} {}\n".format(lock[0], lock[1]))
-		with open('../Evaluate/race_set.txt', 'w') as f:
-			pass
+		
 	
 	proc = subprocess.Popen(['../Evaluate/evaluate'], cwd='../Evaluate/' ,stdout=subprocess.PIPE)
 	out, err = proc.communicate()
@@ -79,8 +78,35 @@ def use_eval(filename, lock_gene):
 	gen is list of tuple which contains start point of lock and end point of lock. 
 	ex) [(3,4), (5,7), (8,11)]
 """
+
+def num_inst():
+    with open('../Evaluate/num_ins.txt', 'r') as f:
+        num = f.readline()
+        return int(num)
+
+
+def num_race_set():
+    race_set = set()
+
+    with open('../Evaluate/race_set.txt', 'r') as f:
+        lines = f.readlines()
+
+        for line in lines:
+            pos = line.find(' ')
+            line1 = int(line[:pos])
+            line2 = int(line[pos + 1:])
+
+            race_set.add((min(line1, line2), max(line1, line2)))
+
+    return len(race_set)
+
+
 def get_score(src, lock_gene):
-	return len(lock_gene)
+	inst = 0
+        race_set = 0
+        
+        with open('../Evaluate/race_set.txt', 'w') as f:
+            pass
 	
 	# TODO
 	for filename in os.listdir(src):
@@ -88,5 +114,8 @@ def get_score(src, lock_gene):
 			continue 
 		full_filename = os.path.join(src, filename)
 		use_eval(full_filename, lock_gene)
+                inst += num_inst()
+	
+        race_set = num_race_set()
 
-		
+        return (race_set, inst)
