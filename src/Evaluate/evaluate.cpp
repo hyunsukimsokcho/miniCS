@@ -83,7 +83,7 @@ int num_ins()
 	// Compile test_join.cpp file
 	// Static to avoid dynamic library link
 	system("gcc -pthread -static -g test_join.cpp -o test_join_exe");
-	system("gdb -q -batch -x gdb_script.py test_join_exe");
+	system("gdb -q -batch -x gdb_script.py test_join_exe > /dev/null 2>&1");
 
 	return 0;
 }
