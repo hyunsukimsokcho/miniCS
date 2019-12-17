@@ -5,6 +5,14 @@ LOCK_START = "pthread_mutex_lock(&mutex_lock);\n"
 LOCK_END = "pthread_mutex_unlock(&mutex_lock);\n"
 
 def convert_to_multi_threaded_code(f, gene):
+	"""
+		Return code lines after inserting lock commands.
+		`code lines` is a list of strings.
+
+		Keyword arguments:
+		f -- file object for source code
+		gene -- list of locks
+	"""
 	global LOCK_END
 	global LOCK_START
 	lines = f.readlines()
@@ -28,6 +36,13 @@ def convert_to_multi_threaded_code(f, gene):
 	return ret
 
 def convert_to_join_threaded_code(lines):
+	"""
+		Return code lines after inserting `pthread_join` right after `pthread_create`.
+		`code lines` is a list of strings.
+
+		Keyword arguments:
+		lines -- `code lines` which is a returned value from `convert_to_multi_thread_code(f, gene)`
+	"""
 	ret = []
 	keystr = 'pthread_create(&'
 	keystr2 = 'pthread_join('
@@ -55,6 +70,11 @@ def convert_to_join_threaded_code(lines):
 	return ''.join(ret)
 
 def use_eval(filename, lock_gene):
+	"""
+		Write input files necessary for `../Evaluate/evaluate.exe` to calculate data race # and instruction #.
+		It writes `../Evaluate/test.cpp`, `../Evaluate/test_join.cpp` and `../Evaluate/lock_range.cpp`.
+		Finally, it executes `../Evaluate/evaluate.exe` file.
+	"""
 	code_w_lock = []
 	code_w_join = []
 	with open(filename, 'r') as f:
@@ -73,12 +93,20 @@ def use_eval(filename, lock_gene):
 	subprocess.call(['../Evaluate/evaluate'], cwd='../Evaluate/')
 
 def num_inst():
+	"""
+		Return the number of instructions
+		Use `../Evaluate/num_ins.txt` file.
+	"""
 	with open('../Evaluate/num_ins.txt', 'r') as f:
 		num = f.readline()
 		return int(num)
 
 
 def num_race_set():
+	"""
+		Return the number of data race.
+		Use `../Evaluate/race_set.txt` file.
+	"""
 	race_set = set()
 
 	with open('../Evaluate/race_set.txt', 'r') as f:
@@ -93,11 +121,15 @@ def num_race_set():
 
 	return len(race_set)
 
-""" 
-	lock_gene is list of tuple which contains start point of lock and end point of lock. 
-	ex) [(3,4), (5,7), (8,11)]
-"""
 def get_score(src, lock_gene):
+	"""
+		Return score of given lock_gene.
+		score is tuple with size 2 -- (Data race #, Instruction #)
+
+		Keyword Arguments:
+		lock_gene -- list of tuple which contains start point of lock and end point of lock. 
+					ex) [(3,4), (5,7), (8,11)]
+	"""
 	inst = 0
 	race_set = 0
 	
