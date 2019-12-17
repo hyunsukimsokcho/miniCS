@@ -1,4 +1,6 @@
 # Genetic Algorithm
 
 ## How to run
-`python3 ga.py `*`path_to_script path_to_src`*``
+command: `python3 ga.py src`
+
+`src` is a name of test code ('dining', 'easytest', 'global')
