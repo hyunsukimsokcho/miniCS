@@ -2,14 +2,14 @@ sudo: required
 language: generic
 services: docker
 script:
-- docker run --mount src=$TRAVIS_BUILD_DIR/src,target=/usr/src/tex,type=bind dxjoke/tectonic-docker
+- docker run --mount src=$TRAVIS_BUILD_DIR/src/GroupReport,target=/usr/src/tex,type=bind dxjoke/tectonic-docker
   /bin/sh -c "tectonic --keep-intermediates --reruns 0 group_report.tex; biber group_report; tectonic group_report.tex"
 deploy:
   provider: releases
   api_key:
     secure: Q5JykTVWRmqHFL8b/OA5pJZRf64H0+5XFwQQNH+ddabS8+aUsJ683kWAzbh4mU1kS0mtGhb4CnZUCKVIchYVNV6XdqMeVBkH4ON/Yg0T2bsmsJqHWKI8/mi9CelUnKSOQv9cDLTzZcjWiii7wGMUqk+LWHyUa2Z5rMk+ckPNsjctGWfkGE5xK7L5LQ1IrxiWONYslTWtx0ASIQI8TrzGE6igtN0Z4f9hFYzwMExXjE/2aSDEw5g45dC2y04GtiEJaPlOAuT1uaXkS4ENXXNNeuu/FhXn3W5/E/sdp3Emx06pSSd51H7F6jSkmST/L6Oi/yLwcIKduWebGEt1uGXstcoq4rOmJXDAKuuZe7kTZA1zJOilQktPtkFknvpdPpwM4S8fWHgXHkMTb8HH6ZGRuiddz/5TS8mZf9CokEQaAsQCGSI52lOjgnfu8HQI91EsuviLwAg+WvVdkl4QhZvIqJesjJqiRS9yHwkl1ajvH0MAqsGL/GMoKAUyYn8MAV4/GZW2RUeTOvlP9QYSwOj9ubBi8oAIJ+beAuP2jbYlkSopD/zuIXXts97yDYqoaj1dFZY1R+cIfPTkq4yEFXCMeDbFNZgoC104HW81iVCW3M31q236Sk2pHg4mp55B4UX+Hu1GvdOcwcukQktSWU76+3jq6GLmgQ07lO/hD5f0xY0=
   file: 
-  - ./src/group_report.pdf
+  - ./src/GroupReport/group_report.pdf
   skip_cleanup: true
   on:
     tags: true
