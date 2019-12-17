@@ -93,9 +93,5 @@ int main()
 	data_race();
 	num_ins();
 	
-	f = fopen("num_ins.txt", "r");
-	int ins = 0;
-	if(fgets(buf, MAX_LEN, f) != NULL) ins = std::stoi(buf, nullptr);
-	
 	return 0;
 }
