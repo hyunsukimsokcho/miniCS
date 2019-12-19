@@ -1,10 +1,10 @@
 \subsection{Population generation}
 
-To keep the programs simple, we assume the following constraints:
+As a prototype, we assume the following constraints:
 
 \begin{enumerate}
-    \item There are no comments, built-in functions, (TODO)
-    \item All scopes are explicitly given with curly braces. (TODO write about line breaks)
+    \item All scopes are explicitly given with curly braces.
+    \item In the \verb|if|-branches, \verb|for|-branches, and \verb|while|-branches, there is no line break between the closing parenthesis and the opening brace. There is no line break between the braces and \verb|else|.
 \end{enumerate}
 
 Under these assumptions, we find a \textit{valid range} $[a, b]$, and modify the code so that a lock is held at the end of the $a$-th line and released at the end of the $b$-th line. A valid range to lock must satisfy the following four conditions:
@@ -51,7 +51,6 @@ static StatementMatcher global_match =
   ).bind("globalRef");
   \end{lstlisting}
 
-
 Next, a scope in a function is detected by a \verb|CoumpoundStmt| node:
 
 \begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left]
@@ -61,7 +60,17 @@ static StatementMatcher scope_match =
       functionDecl().bind("function")
     )
   ).bind("scope");
-  \end{lstlisting}
+\end{lstlisting}
 
+Finally, a return statement in a function is detected by a \verb|ReturnStmt| node:
 
-After finding all references to global variables and all scopes, we output all possible valid ranges in the program. To generate a population, we choose zero or more valid ranges such that no two ranges with the same kind of lock do not intersect.
+\begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left]
+static StatementMatcher return_match =
+  returnStmt(
+    hasAncestor(
+      functionDecl().bind("function")
+    )
+  ).bind("return");
+\end{lstlisting}
+
+After finding all references to global variables, all return statements, and all scopes, we output all possible valid ranges in the program. To generate a population, we choose zero or more valid ranges such that no two ranges with the same kind of lock do not intersect.
