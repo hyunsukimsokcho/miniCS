@@ -83,7 +83,7 @@ What does it mean?
 Since our goal is to build code "without data race" and has "minimum lock interval", we have two objective for fitness evaluation. 
 
 \subsubsection{Data race free}
-First one is number of data races detected by our data race detector, \verb|Threadsanitizer|. It's part of Clang that can detect data race for given code. The detection report will be offered like the sample below:
+First objective is number of "racing sets". The term "racing set" means the set of two lines that have data race. Since we need data race free code, we need to minimize the number of racing sets to 0. And this number can be obtained by data race detector, ThreadSanitizer. It's part of Clang that can detect data race for given code. The detection report will be offered like the sample below:
 
 \begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left]
 WARNING: ThreadSanitizer: data race
@@ -96,17 +96,22 @@ WARNING: ThreadSanitizer: data race
     #1 main simple_stack2.cc:41
 \end{lstlisting}
 
-This report gives us four "racing sets" $(16, 29)$, $(16, 41)$, $(34, 29)$, $(34, 41)$ that each $(a, b)$ means $a$-th line and $b$-th line have data race.
+This report gives us four racing sets $(16, 29)$, $(16, 41)$, $(34, 29)$, $(34, 41)$ that each $(a, b)$ means $a$-th line and $b$-th line have data race. Since the detection result of ThreadSanitizer depends on execution order of threads, we execute ThreadSanitizer for every possible execution orders (for $n$ threads, execute for $n!$ times) and count the number of distinct racing sets.
  
 \subsubsection{Lock interval}
-Since 
+Second objective is number of machine instructions between locks(including themselves). Lock interval is 
 
 \section{Evaluation}
 
 
 \section{Conclusion}
 As a result,
-Slowdown of the program is occured by 
+Slowdown of the program is occured by two reasons
+\begin{enumerate}
+    \item ThreadSanitizer should be executed for every possible execution order of threads.
+    \item GDB runs the program step by step between locks.
+\end{enumerate}
+To resolve this problem, 
 Possible improvements (e.g. Coevolution with Thread schedule with Qemu emulator)
 
 
