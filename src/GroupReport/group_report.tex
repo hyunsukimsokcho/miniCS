@@ -1,7 +1,9 @@
 \documentclass[sigconf]{acmart}
+
 \settopmatter{printacmref=false} % Removes citation information below abstract
 \renewcommand\footnotetextcopyrightpermission[1]{} % removes footnote with conference information in first column
 
+\usepackage{url}
 \usepackage{graphicx}
 \usepackage{comment}
 \usepackage{float}
@@ -80,7 +82,7 @@ In this work, we tackle such intractability by applying combination of heuristic
 
 \input{sections/environment.tex}
 
-\subsection{Gene representation}
+\input{sections/gene_representation.tex}
 
 \input{sections/population_generation.tex}
 
@@ -94,4 +96,8 @@ In this work, we tackle such intractability by applying combination of heuristic
 
 \input{sections/conclusion.tex}
 
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{base}
+
 \end{document}
+\endinput
