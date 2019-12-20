@@ -1,10 +1,18 @@
 \section{Introduction}
 \label{sec:intro}
+
 As the era of artificial intelligence and big data, a program that runs on single core machine has fundamental limitation in terms of computation power. In hardware manufacturing industry, developing SoC optimized to such computations is already on-going process. Still, thanks to the end of Moore's law and Dennard's scaling, software implementation that synchronizes multiple threads is unavoidable in order to achieve reasonably scalable computing.
 
 There has been an aggressive development of libraries and languages that exploits concurrency such as TensorFlow, PyTorch, CUDA, OpenCL, and etc. Inside each implementation, concurrent programming enables multi-threading, and this is what really drives the high-level logic to be correct and efficient. Some libraries hide the complicated logic for concurrency underneath, and some provides basic API as directives to let programmers fill in the gaps with their desired logic. Developer of the library in former case, while any programmer who tries to use the language in latter are those who really meets the nitty-gritty details of concurrency. Traditionally, it has been a fear for most system developers to develop multi-threaded codes. Such aspect can be easily understood by observing how many stale bugs are still present in many projects (e.g. Mozilla's Firefox) related to concurrency.
 
-Multi-threaded codes often comes with the problem called \textit{data race}. It means multiple threads access the same memory location concurrently and at least one of them is writing. It may cause computation give wrong output depending on their execution order. It can be resolved by using exclusive locks to control accesses to that memory. But abusing lock will interrupt other threads' execution and it will lead to longer execution time.
+Multi-threaded codes often comes with the problem called \textit{data race}. It indicates the situation of multiple threads accessing the same memory location simultaneously which is not a intention of a programmer. Data race results in non-deterministic executions, which eventually gives wrong output depending on the specific interleaving order of threads. Such issue can be resolved by imposing exclusive locks to prevent simultaneous access from more than desired number of threads. However, abusing lock will block other threads' execution, then lead to longer execution time or even a deadlock, which is very severe. Further details can be found in \ref{sec:data_race}. In our work, we do not rigorously deal with the problem of deadlocks which is left as one of our possible improvement.
 
-So it's important to protect shared memory location by using locks and also minimizing the interval(execution time) between lock and unlock. But it's hard to be achieved by hand, and some of races can be only detected on runtime.
-Our project MiniCS is solution for this problem. It produces population of candidate codes with locks and perform GA to get best code that's without data race and has minimum "lock interval" (Lock interval means "execution time between lock including lock and unlock themselves" on this paper).
+It is important to protect shared memory location by using locks and also minimising the interval (execution time) between lock and unlock. But it's hard to be achieved by hand, and some of races can be only detected on runtime.
+Our project MiniCS is solution for this problem. It produces population of candidate codes with locks and perform GA to get best code that's without data race and has minimum "lock interval" (Lock interval means "execution time between lock including lock and unlock themselves" on this paper). 
+
+\begin{itemize}
+	\setlength\itemsep{0.5em}
+	\item[] \textbf{RQ1} How to measure the performance of each multi-threaded code rigorously?
+	\item[] \textbf{RQ2} Where is the possible locations to put locks and how to find better locations?
+	\item[] \textbf{RQ3} How effective is MiniCS?
+\end{itemize}
