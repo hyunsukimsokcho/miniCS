@@ -1,0 +1,35 @@
+\subsection{Fitness evaluation}
+Since our goal is to build code "without data race" and has "minimum lock interval", we have two objective for fitness evaluation. Between two of them we have to make the code data race free and then reduce the lock interval, so we are going to give priority to data race. It means that if we have fitness $(a, b)$ which $a$ stands for data race and $b$ stands for lock interval, we compare $a$ first and then compare $b$ if they are same.
+
+\subsubsection{Data race free}
+First objective is number of "racing sets". The term "racing set" means the set of two lines that have data race. Since we need data race free code, we need to minimize the number of racing sets to 0. And this number can be obtained by data race detector, ThreadSanitizer. It's part of Clang that can detect data race for given code. The detection report will be offered like the sample below:
+
+\begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left]
+WARNING: ThreadSanitizer: data race
+  Write of size 4 at 0x7fe3c3075190:
+    #0 bar1() simple_stack2.cc:16
+    #1 Thread1(void*) simple_stack2.cc:34
+
+  Previous read of size 4 at 0x7fe3c3075190:
+    #0 bar2() simple_stack2.cc:29
+    #1 main simple_stack2.cc:41
+\end{lstlisting}
+
+This report gives us four racing sets $(16, 29)$, $(16, 41)$, $(34, 29)$, $(34, 41)$ that each $(a, b)$ means $a$-th line and $b$-th line have data race. Since the detection result of ThreadSanitizer depends on execution order of threads, we execute ThreadSanitizer for every possible execution orders (for $n$ threads, execute for $n!$ times) and count the number of distinct racing sets.
+ 
+\subsubsection{Lock interval}
+Second objective is number of machine instructions between locks(including themselves). Measuring actual execution time is noisy and can be affected by environment, so we use the number of machine instruction instead of execution time.
+
+The number is measured by using GDB \verb|stepi| function. It runs the program step by step(step means machine instruction) and count the number of them between locks. "Between locks" means containing locks themselves two, because locking and unlocking affects runtime too. More specifically, for given part of code:
+
+\begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left, firstnumber=16]
+int i;
+pthread_mutex_lock(&mutex_lock);
+for (i=0; i<3; i++) {
+    cnt ++;
+}
+pthread_mutex_unlock(&mutex_lock);
+return NULL;
+\end{lstlisting}
+
+It locks on line 17, and unlock on line 21. So on GDB, we set breakpoint on line 17 and execute \verb|stepi| until the execution of unlock on line 21 ends. Now if we count every instructions, it will be the number of machine instructions between locks. On this sample code, it executes 148 instruction between two locks. Additionally, if we change thread during execution the number of execution won't be measured properly, so it's important to execute only one thread at a time.
