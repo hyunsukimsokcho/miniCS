@@ -7,7 +7,7 @@ We forced the genes used in the genetic algorithm to have only a valid lock rang
     \item The elements of the gene do not intersect with each other.
 \end{enumerate}
 
-We generate $U$ using clang AST. And, $U$ is needed for the mutation to work properly. After making changes to the gene, the changed gene must still be a subset of $U$ for this mutation to be valid. We used two methods under these conditions.
+We generate $U$ using Clang AST. And, $U$ is needed for the mutation to work properly. After making changes to the gene, the changed gene must still be a subset of $U$ for this mutation to be valid. We used two methods under these conditions.
 
 The first way is to add a lock. Let's say $G$ is the gene that we want to mutate. Create $G^{'}$ by selecting an element of $U$ that does not intersect $G$ and adding it to $G$. $G^{'}$ is still a subset of $U$ and the elements do not intersect with each other. Thus, $G^{'}$ is a valid gene.
 
