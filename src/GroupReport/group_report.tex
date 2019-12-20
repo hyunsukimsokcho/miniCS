@@ -68,10 +68,7 @@ Modern machines consume massive amount of data as well as drastic amount of comp
 
 \maketitle
 
-\section{Introduction}
-Multi-threaded codes often come up with the problem called data race. It means multiple threads access the same memory location concurrently and at least one of them is writing. It may cause computation give wrong output depending on their execution order. It can be resolved by using exclusive locks to control accesses to that memory. But abusing lock will interrupt other threads' execution and it will lead to longer execution time.
-So it's important to protect shared memory location by using locks and also minimizing the interval(execution time) between lock and unlock. But it's hard to be achieved by hand, and some of races can be only detected on runtime.
-Our project MiniCS is solution for this problem. It produces population of candidate codes with locks and perform GA to get best code that's without data race and has minimum "lock interval" (Lock interval means "execution time between lock including lock and unlock themselves" on this paper).
+\input{sections/introduction.tex}
 
 \input{sections/background.tex}
 
