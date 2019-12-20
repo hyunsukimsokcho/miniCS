@@ -1,0 +1,30 @@
+\subsection{Data race}
+
+A {\it{data race}} is a situation where multiple threads try to access shared data at once, and the result depends on the execution order of the threads. For example, consider the following code:
+
+\begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left]
+int a = 0;
+int foo() {
+    a++;
+}
+\end{lstlisting}
+
+Suppose two threads call the \verb|foo| function at once. If the threads do not run concurrently, then the value of \verb|a| will be 2. However, this is not always the case when there is concurrency, because \verb|a++| actually consists of three steps: reading the value, incrementing the value, and writing back the value. The following sequence of actions may occur as a result: \begin{enumerate}
+    \item Thread 1 reads the value of \verb|a|, which is 0.
+    \item Thread 2 reads the value of \verb|a|, which is 0.
+    \item Thread 1 increments its value, making it 1.
+    \item Thread 2 increments its value, making it 1.
+    \item Thread 1 writes 1 into the value of \verb|a|.
+    \item Thread 2 writes 1 into the value of \verb|a|.
+\end{enumerate}
+
+We use locks to prevent this situation. When a thread tries to acquire a lock, but another thread owns the lock, then it must wait before the other thread releases the lock. For example, in the modified code below, two threads would wait for each other to read the value of verb|a|, increment it, and write it back. This keeps the global variable from being accessed twice at the same time.
+
+\begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left]
+int a = 0;
+int foo() {
+    pthread_mutex_lock(&mutex_lock);
+    a++;
+    pthread_mutex_unlock(&mutex_lock);
+}
+\end{lstlisting}

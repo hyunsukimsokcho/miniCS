@@ -21,11 +21,9 @@ For example, consider the following code:
 
 \begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left]
 int arr[100];
-int bar(int n)
-{
+int bar(int n) {
     int x = 0;
-    for (int i = 0; i <= n; ++i)
-    {
+    for (int i = 0; i <= n; ++i) {
         arr[i] = x;
         x+= i;
     }
@@ -33,9 +31,9 @@ int bar(int n)
 }
 \end{lstlisting}
 
-A range $[6, 7]$ is valid; in this case, we hold and release a lock right before and after executing \verb|arr[i] = i|. On the other hand, $[0, 1]$ (Holding a lock before the first line) is invalid because it is not contained in a function. $[7, 8]$ is invalid because there are no global variables. $[3, 7]$ is invalid because the scope inside the \verb|for| loop neither contains $[3, 7]$ nor is contained in $[3, 7]$. Finally, $[9, 10]$ is invalid because it contains \verb|return|.
+A range $[4, 5]$ is valid; in this case, we hold and release a lock right before and after executing \verb|arr[i] = x|. On the other hand, $[1, 9]$ is invalid because it is not contained in a function. $[5, 6]$ is invalid because there are no global variables. $[2, 5]$ is invalid because the scope inside the \verb|for| loop neither contains $[2, 5]$ nor is contained in $[2, 5]$. Finally, $[7, 8]$ is invalid because it contains \verb|return|.
 
-We used Clang AST to detect the references to global variables. An expression in a function refers to a global variable if there is a \verb|DeclRefExpr| node whose reference variable has a global storage:
+We use Clang AST to detect the references to global variables. An expression in a function refers to a global variable if there is a \verb|DeclRefExpr| node whose reference variable has a global storage:
 
 \begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left]
 static StatementMatcher global_match =
