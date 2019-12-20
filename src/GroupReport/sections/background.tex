@@ -6,7 +6,8 @@ Minimising critical section is one of the most important aspect when refactoring
 \input{sections/data_race.tex}
 
 \subsection{Machine instructions}
-In compiled languages like \textit{C/C++}, each line of code is translated into multiple machine instructions. For example, consider \textbf{\textit{a++}} at third line of code snippet in \ref{sec:data_race}. It is adding one to integer variable \textbf{\textit{a}}. Although it is a single line of code in \textit{C}, a machine equipped with Intel x86 processors translates it into following instructions:
+In compiled languages like \textit{C/C++}, each line of code is translated into multiple machine instructions. For example, consider \textbf{\textit{a++}} located at third line of code snippet in \ref{sec:data_race}. It is adding one to integer variable \textbf{\textit{a}}. Although it is a single line of code in \textit{C}, a machine equipped with Intel x86 processors translates it into the following instructions:
+\vspace{0.3cm}
 \begin{itemize}
 	\item[] \textbf{ld} \,\,\, \$r1, \textit{a}
 	\item[] \textbf{add} \$r1, \$r1, 1
