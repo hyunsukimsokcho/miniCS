@@ -6,3 +6,11 @@ Minimising critical section is one of the most important aspect when refactoring
 Jaemin Choi?
 
 \subsection{Machine instructions}
+In compiled languages like \textit{C/C++}, each line of code is translated into multiple machine instructions. For example, consider \textbf{\textit{a += 1}}. It is adding one to integer variable \textbf{\textit{a}}. Although it is a single line of code in \textit{C}, a machine equipped with Intel x86 processors translates it into following instructions:
+\begin{itemize}
+	\item[] \textbf{ld} \,\,\, \$r1, \textit{a}
+	\item[] \textbf{add} \$r1, \$r1, 1
+	\item[] \textbf{st} \,\,\, \$r1, \textit{a}
+\end{itemize}
+
+It first loads the value of \textbf{\textit{a}} from memory into register \textit{\$r1}. Then, add one to the register value. Finally, stores the result back to the memory location of \textbf{\textit{a}}. 
