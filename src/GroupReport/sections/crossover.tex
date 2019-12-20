@@ -1,0 +1,24 @@
+\subsection{Crossover}
+
+Because we force only valid genes as in mutations, we need to prove that the altered gene is still valid at the crossover. We used a single-point crossover. We have sorted the range of genes to make implementation easier. Assume that applying the crossover to the following two genes $G_{0}$ and $G_{1}$.
+\[G_{0} = \{(s_{1}, e_{1}), (s_{2}, e_{2}), \cdots , (s_{n}, e_{n}) \}\]
+\[G_{1} = \{(l_{1}, r_{1}), (l_{2}, r_{2}), \cdots , (l_{m}, r_{m}) \}\] 
+
+If split point $x$ is set at $G_{0}$, $G_{0}$ is split to $\{(s_{1}, e_{1}), \cdots, (s_{i}, e_{i})\}$ and $\{(s_{i+1}, e_{i+1}), \cdots (s_{n}, e_{n})\}$, to satisfy $e_{i} \leq x \leq s_{i+1}$.
+
+$G_ {1}$ is divided in the same way. However, if $G_{1}$ has $(l_{j}, r_{j})$ which satisfies $l_{j} \leq x \leq r_{j}$, there is a problem. We can't divide a lock range with $ (l_ {j}, x) $, $ (x, r_ {j}) $. In the code below, you can see that if you divide $ (1, 6) $ by $ (1,4), (4, 6) $, you get an invalid lock.
+
+\begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left]
+int i = 0;
+cnt = 0;
+while(i < 10) {
+    cnt = cnt + i;
+    i = i + 1;
+}
+\end{lstlisting}
+
+We decided to merge them instead of split. Assume that we got the following children after crossover $G_{0}$ and $G_{1}$.
+\[\{ (s_{1}, e_{1}),\cdots,(s_{i}, e_{i}), (l_{j+1}, r_{j+1}), \cdots, (l_{m}, r_{m}) \}\]
+\[\{ (l_{1}, r_{1}),\cdots,(l_{j},r_{j}), (s_{i+1}, e_{i+1}), \cdots, (s_{n}, e_{n}) \}\]
+
+There is a possibility of overlap between $(s_{i}, e_{i})$ and $(l_{j+1}, r_{j+1})$. The same is true between $(l_{j}, r_{j}$ and $(s_{i+1}, e_{i+1})$. In this case, the problem can be solved by combining the two ranges together. If $(x0,y0)$ and $(x1,y1)$ are in $U$, $(min(x0,x1)$, $max(y0,y1))$ also are in $U$. There is no \verb|return| or part of the \verb|for|-statement between $(x0,y0)$ and so on between $(x1,y1)$. For this reason, even if the two ranges are combined, the \verb|return| or \verb|for|-statement is not included and all of the valid lock conditions are satisfied.

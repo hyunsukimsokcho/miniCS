@@ -1,0 +1,14 @@
+\subsection{Mutation}
+We forced the genes used in the genetic algorithm to have only a valid lock range. For this reason, a difficulty arises in mutation. If any of the lock ranges are changed randomly,  invalid lock ranges can be created. As such, mutations should not change the given gene freely but should give only limited changes. To solve this problem, we need to look at the following facts.
+
+\begin{enumerate}
+    \item Gene is a set that has a lock range as an element.
+    \item If there is a set $U$ with all possible lock ranges, then all genes are a subset of $U$.
+    \item The elements of the gene do not intersect with each other.
+\end{enumerate}
+
+We generate $U$ using clang AST. And, $U$ is needed for the mutation to work properly. After making changes to the gene, the changed gene must still be a subset of $U$ for this mutation to be valid. We used two methods under these conditions.
+
+The first way is to add a lock. Let's say $G$ is the gene that we want to mutate. Create $G^{'}$ by selecting an element of $U$ that does not intersect $G$ and adding it to $G$. $G^{'}$ is still a subset of $U$ and the elements do not intersect with each other. Thus, $G^{'}$ is a valid gene.
+
+The second way is to remove one lock. Create $G^{'}$ by removing one of the elements of $G$. Since $G^{'}$ is a subset of $G$, $G^{'}$ is also a subset of $U$. And the elements of $G^{'}$ do not intersect each other. Thus, $G^{'}$ is a valid gene.
