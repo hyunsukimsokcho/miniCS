@@ -7,12 +7,15 @@ There has been an aggressive development of libraries and languages that exploit
 
 Multi-threaded codes often comes with the problem called \textit{data race}. It indicates the situation of multiple threads accessing the same memory location simultaneously which is not a intention of a programmer. Data race results in non-deterministic executions, which eventually gives wrong output depending on the specific interleaving order of threads. Such issue can be resolved by imposing exclusive locks to prevent simultaneous access from more than desired number of threads. However, abusing lock will block other threads' execution, then lead to longer execution time or even a deadlock, which is very severe. Further details can be found in \ref{sec:data_race}. In our work, we do not rigorously deal with the problem of deadlocks which is left as one of our possible improvement.
 
-It is important to protect shared memory location by using locks and also minimising the interval (execution time) between lock and unlock. But it's hard to be achieved by hand, and some of races can be only detected on runtime.
-Our project MiniCS is solution for this problem. It produces population of candidate codes with locks and perform GA to get best code that's without data race and has minimum "lock interval" (Lock interval means "execution time between lock including lock and unlock themselves" on this paper). 
+It is important to protect shared memory location using locks while minimising the interval between lock and unlock. However, it is hard to achieve the sweet spot manually without possible races that reveals on runtime. Our project, \textbf{MiniCS} is a solution for the problem in natural setup. We generate and evolve the population of candidate programs equipped with synchronization primitives. Then, apply genetic algorithm to get the best performing program without data race. With that being said, we come up with the following research questions:
+
+\vspace{0.2cm}
 
 \begin{itemize}
 	\setlength\itemsep{0.5em}
 	\item[] \textbf{RQ1} How to measure the performance of each multi-threaded code rigorously?
 	\item[] \textbf{RQ2} Where is the possible locations to put locks and how to find better locations?
-	\item[] \textbf{RQ3} How effective is MiniCS?
+	\item[] \textbf{RQ3} How one can improve MiniCS?
 \end{itemize}
+
+By answering to these questions, we suggest our solution in a more detailed and convincing manner.
