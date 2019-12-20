@@ -60,8 +60,8 @@ Multi-threaded codes often come up with the problem called data race. It means m
 So it's important to protect shared memory location by using locks and also minimizing the interval(execution time) between lock and unlock. But it's hard to be achieved by hand, and some of races can be only detected on runtime.
 Our project MiniCS is solution for this problem. It produces population of candidate codes with locks and perform GA to get best code that's without data race and has minimum "lock interval" (Lock interval means "execution time between lock including lock and unlock themselves" on this paper).
 
-\section{Background}
-COMMENT!!! - Do we really need to write background?
+\input{sections/background.tex}
+
 \subsection{Critical section}
 
 \subsection{Genetic algorithm}
