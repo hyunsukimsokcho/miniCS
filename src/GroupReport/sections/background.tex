@@ -12,4 +12,4 @@ In compiled languages like \textit{C/C++}, each line of code is translated into 
 	\item[] \textbf{st} \,\,\, \$r1, \textit{a}
 \end{itemize}
 
-It first loads the value of \textbf{\textit{a}} from memory into register \textit{\$r1}. Then, add one to the register value. Finally, stores the result back to the memory location of \textbf{\textit{a}}. 
+It first loads the value of \textbf{\textit{a}} from memory into register \textit{\$r1}. Then, add one to the register value. Finally, it stores the result back to the memory location of \textbf{\textit{a}}. Note that these machine instructions are the commit point for each computation within a machine. It means that we can ensure there is no thread interleaving while executing each instruction. In fact, this is the reason why we are safe to count the number of instructions to measure performance of target program independent from other programs being executed.
