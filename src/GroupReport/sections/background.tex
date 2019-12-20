@@ -1,7 +1,7 @@
 \section{background}
 \label{sec:background}
 
-Minimising critical section is one of the most important aspect when refactoring multi-threaded code. However, it is impossible to compare the performance of any two distinct version of code by just measuring the execution time. It is hard to guarantee those measured durations solely depend on each code execution, unless we take full control over thread scheduling, which is totally up to operating systems. In order to overcome such issues, we took approach counting machine instructions especially in Intel x86 architecture. Further details about how our evaluations went through will be mentioned in section 3 and 4. Here, we briefly go over two concepts that needs to be explained before moving on to details.
+Minimising critical section is one of the most important aspects when refactoring multi-threaded code. However, it is impossible to compare the performance of any two distinct version of code by just measuring the execution time. It is hard to guarantee those measured durations solely depend on each code execution, unless we take full control over thread scheduling, which is totally up to operating systems. In order to overcome such issues, we took approach counting machine instructions especially in Intel x86 architecture. Further details about how our evaluations went through will be mentioned in section 3 and 4. Here, we briefly go over two concepts that needs to be explained before moving on to details.
 
 \input{sections/data_race.tex}
 
