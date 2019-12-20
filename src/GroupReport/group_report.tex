@@ -6,6 +6,14 @@
 \usepackage{listings} 
 \lstset{language=C++}
 
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
 \copyrightyear{2019}
 \acmYear{2019}
 \setcopyright{rightsretained}
@@ -61,12 +69,14 @@ So it's important to protect shared memory location by using locks and also mini
 Our project MiniCS is solution for this problem. It produces population of candidate codes with locks and perform GA to get best code that's without data race and has minimum "lock interval" (Lock interval means "execution time between lock including lock and unlock themselves" on this paper).
 
 \section{Background}
-COMMENT!!! - Do we really need to write background?
-\subsection{Critical section}
+
+\input{sections/data_race.tex}
 
 \subsection{Genetic algorithm}
 
 \section{Experiment design}
+
+\input{sections/environment.tex}
 
 \subsection{Gene representation}
 
