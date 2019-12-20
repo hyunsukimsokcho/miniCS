@@ -9,10 +9,12 @@ Function thread2 refers to global cnt at 27:33
 Function thread2 refers to global cnt at 28:9
 Return statement in line 30
 15 20
+16 20
 17 18
 17 19
 18 19
 24 29
+25 29
 26 27
 26 28
 27 28
