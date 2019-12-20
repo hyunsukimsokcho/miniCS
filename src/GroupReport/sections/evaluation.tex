@@ -1,0 +1,40 @@
+\section{Evaluation}
+For the evaluation, we will check whether the program works as expected for given test codes and compare the result with optimal solution. The result of program is given in list $[(s1, e1), (s2, e2), ..., (sn, en)]$ which each $(si, ei)$ states for locking range. And the fitness will be given in tuple $(a, b)$ where $a$ is number of racing sets detected by ThreadSanitizer and $b$ is the number of machine instructions executed between locks.
+
+\subsection{easytest}
+"easytest.cpp" is short test to check whether the program considers the number of machine instructions of locks themselves. It has two versions, one iterates \verb|for| statement for one time, and the other iterates three times. The part of first version is like below:
+
+\begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left, firstnumber=16]
+int i;
+for (i=0; i<1; i++) {
+    cnt ++;
+}
+return NULL;
+\end{lstlisting}
+
+And this is the second version:
+
+\begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left, firstnumber=16]
+int i;
+for (i=0; i<3; i++) {
+    cnt ++;
+}
+return NULL;
+\end{lstlisting}
+
+For two tests, line 20 causes data race so we have to protect it by lock. There are two choices: place lock inside or outside of \verb|for|-statement. Since locking and unlocking acquires some machine instructions too, for the second version if we place lock inside \verb|for|-statement the lock range will cover smaller amount of code. But lock interval will be longer because locking and unlocking will be performed for three times.
+As a result, the first version produced lock range $[(17, 18)]$ and second produced $[(16, 19)]$. It shows that the program considers locking instructions properly.
+
+\subsection{global}
+Since "easytest.cpp" is very short, it easily came out with optimal lock range. Now we have longer test "global.cpp" with 106 lines. For this test we are going to check that the program successfully creates code without data race and reduces lock interval. Then we'll compare the output with optimal lock range.
+
+First, let's see whether the program works properly: prevent data race and minimise lock interval. Initial population starts with best lock ranges [(49, 56), (57, 65), (65, 67), (71, 82), (82, 85), (89, 90), (94, 97), (97, 99)] with 0 data race and 3540 machine instructions. Usually the program starts with lock range that covers almost every part of the code to keep it data free. After 10 generations with 10 candidates, the program comes out with output lock range [(51, 58), (64, 65), (65, 67), (72, 78), (78, 82), (82, 84), (89, 90), (90, 94), (94, 97)] with 0 data race and 2274 machine instructions. We can easily observe that the program excluded the ranges that don't have to be protected and reduce the lock interval properly. 
+
+Next, let's compare the best output with optimal lock range. The optimal solution is [(51, 67), (72, 84), (89, 97)]. The optimal solution and program's output have two differences:
+
+\begin{enumerate}
+    \item Program did not detect the range $(60, 64)$ that causes data race.
+    \item Adjacent ranges were merged in optimal solution.
+\end{enumerate}
+
+First difference is critical because missing data race can result as wrong code that has potential data race but reported to be data race free. This problem is caused by ThreadSanitizer, so it can be solved by using better data race detector. Second difference is problem of our GA method. Separating adjacent ranges that can be merged causes more locks to be used, and results in increase of lock interval. To resolve this problem, adding merge to mutation operator would be helpful.
