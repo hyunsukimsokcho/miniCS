@@ -17,9 +17,8 @@ LIB = -fno-rtti \
     -lclangASTMatchers \
     -lclangBasic -lclang
 
-gm: TREEVIEW.cpp
-	clang++ `llvm-config --cxxflags --ldflags` TREEVIEW.cpp $(LIB) `llvm-config --libs --system-libs` -o gm
+gm: gm.cpp
+	clang++ `llvm-config --cxxflags --ldflags` gm.cpp $(LIB) `llvm-config --libs --system-libs` -o gm
 
-PROGRAMS = TREEVIEW
 clean:
-	@rm -f TREEVIEW.o gm
+	@rm -f gm.o gm

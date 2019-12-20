@@ -1,4 +1,7 @@
 \documentclass[sigconf]{acmart}
+\settopmatter{printacmref=false} % Removes citation information below abstract
+\renewcommand\footnotetextcopyrightpermission[1]{} % removes footnote with conference information in first column
+
 \usepackage{graphicx}
 \usepackage{comment}
 \usepackage{float}
@@ -6,11 +9,21 @@
 \usepackage{listings} 
 \lstset{language=C++}
 
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+
 \copyrightyear{2019}
 \acmYear{2019}
-\setcopyright{rightsretained}
-
 \acmConference{CS454 AI Based Software Engineering}{2019 Fall}{KAIST}
+\setcopyright{none}
+\acmDOI{}
+
 \begin{document}
 
 \title{MiniCS: Critical Section Minimisation in Concurrent Programming}
@@ -50,7 +63,7 @@
 \email{bb0711@kaist.ac.kr}
 
 \begin{abstract}
-Modern machines consume massive amount of data as well as drastic amount of computations, as the era of artificial intelligence. In hardware manufacturing industry, developing SoC optimized to such computations is already on-going process. Multi-core with machines are prevalent nowadays. Still, thanks to the end of Moore's law and Dennard's scaling, software implementation that synchronizes multiple threads is unavoidable in order to achieve reasonably scalable computing. However, it is often a fear to write multi-threaded code due to its nondeterministic behavior. In order to tame the parallelism with scalability, using synchronization primitives such as lock and semaphore is mandatory to prevent race conditions. While which API to use is rather trivial, it is usually known that setting critical sections (when to acquire lock, then when to release the lock) is not trivial at all. In this work, we tackle such intractability by applying combination of heuristics for search and static analysis for rigorous evaluation and correctness.
+Modern machines consume massive amount of data as well as drastic amount of computations, as the era of artificial intelligence. In the hardware manufacturing industry, developing SoC optimized to such computations is an already on-going process. Multi-core with machines are prevalent nowadays. Still, thanks to the end of Moore's law and Dennard's scaling, software implementation that synchronizes multiple threads is unavoidable in order to achieve reasonably scalable computing. However, it is often a fear to write multi-threaded code due to its non-deterministic behavior. In order to tame the parallelism with scalability, using synchronization primitives such as lock and semaphore is mandatory to prevent race conditions. While which API to use is rather trivial, it is usually known that setting critical sections (when to acquire a lock, then when to release the lock) is not trivial at all. In this work, we tackle such intractability by applying combination of heuristics for search and static analysis for rigorous evaluation and correctness.
 \end{abstract}
 
 \maketitle
@@ -60,13 +73,15 @@ Multi-threaded codes often come up with the problem called data race. It means m
 So it's important to protect shared memory location by using locks and also minimizing the interval(execution time) between lock and unlock. But it's hard to be achieved by hand, and some of races can be only detected on runtime.
 Our project MiniCS is solution for this problem. It produces population of candidate codes with locks and perform GA to get best code that's without data race and has minimum "lock interval" (Lock interval means "execution time between lock including lock and unlock themselves" on this paper).
 
-\section{Background}
-COMMENT!!! - Do we really need to write background?
+\input{sections/background.tex}
+
 \subsection{Critical section}
 
 \subsection{Genetic algorithm}
 
 \section{Experiment design}
+
+\input{sections/environment.tex}
 
 \subsection{Gene representation}
 

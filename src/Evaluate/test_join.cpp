@@ -70,19 +70,21 @@ void * thread5(void *n) {
 }
 
 void get_chopstick(int p) {
+pthread_mutex_lock(&mutex_lock);
     if (chopsticks[LEFT(p)] == UNUSING && chopsticks[RIGHT(p)] == UNUSING) {
         chopsticks[LEFT(p)] = USING;
         chopsticks[RIGHT(p)] = USING;
         printf("philosopher %d: get chopstick\n", p);
     }
+pthread_mutex_unlock(&mutex_lock);
 }
 
 void put_chopstick(int p) {
     if (chopsticks[LEFT(p)] != USING || chopsticks[RIGHT(p)] != USING) {
         printf("ERROR in philosopher %d\n", p);
     } else {
-        chopsticks[LEFT(p)] = UNUSING;
 pthread_mutex_lock(&mutex_lock);
+        chopsticks[LEFT(p)] = UNUSING;
         chopsticks[RIGHT(p)] = UNUSING;
 pthread_mutex_unlock(&mutex_lock);
         printf("philosopher %d: put chopstick\n", p);
@@ -90,11 +92,13 @@ pthread_mutex_unlock(&mutex_lock);
 }
 
 void eat(int p) {
+pthread_mutex_lock(&mutex_lock);
     if (chopsticks[LEFT(p)] != USING || chopsticks[RIGHT(p)] != USING) {
         printf("ERROR in philosopher %d\n", p);
     } else {
         printf("philosopher %d: eating\n", p);
     }
+pthread_mutex_unlock(&mutex_lock);
 }
 
 
