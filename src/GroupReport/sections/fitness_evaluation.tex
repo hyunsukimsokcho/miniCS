@@ -2,7 +2,7 @@
 Since our goal is to build code "without data race" and has "minimum lock interval", we have two objective for fitness evaluation. Between two of them we have to make the code data race free and then reduce the lock interval, so we are going to give priority to data race. It means that if we have fitness $(a, b)$ which $a$ stands for data race and $b$ stands for lock interval, we compare $a$ first and then compare $b$ if they are same.
 
 \subsubsection{Data race free (\textit{RQ1})}
-First objective is number of "racing sets". The term "racing set" means the set of two lines that have data race. Since we need data race free code, we need to minimize the number of racing sets to 0. And this number can be obtained by data race detector, ThreadSanitizer. It's part of Clang that can detect data race for given code. The detection report will be offered like the sample below:
+First objective is number of "racing sets". The term "racing set" means the set of two lines that have data race. Since we need data race free code, we need to minimize the number of racing sets to 0. And this number can be obtained by data race detector, ThreadSanitizer~\cite{Serebryany:2009:TDR:1791194.1791203}. It's part of Clang that can detect data race for given code. The detection report will be offered like the sample below:
 
 \begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left]
 WARNING: ThreadSanitizer: data race
