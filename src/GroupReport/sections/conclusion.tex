@@ -1,0 +1,23 @@
+\section{Conclusion}
+On evaluation section we observed that our program produced data race free code with short lock interval successfully. On "global.cpp", it reduced the lock interval to $2/3$ of initial lock range that covers every code while keeping the code data race free. Since we have observed that our code works fine, now it's time to discuss problems and possible improvements of our program.
+
+\subsection{Observed problem}
+There are two problems of our program: ThreadSanitizer misses data race, significant slowdown of the program. For ThreadSanitizer error, as discussed on evaluation section we may use better data race detector(will be discussed later).
+
+The program is basically slow because ThreadSanitizer detects data race on runtime and causes 5x to 15x of time overhead. But still, there are possible way to avoid slowdown. There are two reasons of slowdown that we can deal with:
+
+\begin{enumerate}
+    \item ThreadSanitizer should be executed for every possible execution order of threads.
+    \item GDB runs the program step by step between locks.
+\end{enumerate}
+
+Now let's discuss the solution of these problems. For the missing data race and first problem of slowdown, we may use other data race detection program. There are two choices: Static(code) analyzer and RaceFuzzer. First, static analyzer detects data race depending on the code, not on runtime. So it has no time overhead at all and faster than dynamic detector. But it has problem that it can come up with false alarm that detects data race can't be observed on runtime. And second, RaceFuzzer is similar with ThreadSanitizer but it dynamically chooses random thread unlike original one. So it does not depend on execution order and we can execute the program only once. But it has problem too, that detection is probabilistic and takes more time on one execution because it dynamically schedules threads.
+
+And the second problem of slowdown can be resolved by using "Intel process tracing", namely "Intel-pt". It stores the trace of machine instruction execution with very low time overhead, so we can measure lock interval faster than GDB using Intel-pt. Since machine instruction counting with GDB takes a lot of time, it can significantly reduce time overhead for overall project.
+
+\subsection{Possible improvements}
+First, we may use multiple kinds of locks. Our current version uses only one kind of lock for any kind of locks, but it's inefficient because it will make two different locks that protects different memory location to wait for each other. So using multiple kinds of locks will make multithreaded program even more faster. It will need to figure out which variable the lock is protecting, so this improvement will need more code analysis and harder GA.
+
+Second, we need to detect deadlock. Our current version does not detect deadlock, but deadlock is very serious problem for multithreaded programs. To deal with it, we can use ThreadSafetyAnalysis of Clang. It's static test, so we can detect deadlock within short time and drop the candidate codes that has deadlock issue.
+
+Possible improvements (e.g. Coevolution with Thread schedule with Qemu emulator)???
