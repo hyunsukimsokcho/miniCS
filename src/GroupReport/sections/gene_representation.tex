@@ -1,0 +1,7 @@
+\subsection{Gene representation}
+
+We could use AST format generated from Clang as our gene, however, we made the reprsentation simpler for efficient computation. Our gene is a list of 2-tuples where each tuple indicates location (line number) for acquiring lock ($s_i$), and location for releasing it ($e_i$). Here is the gene representing a program with $n$ many locks:
+
+\[G = \{(s_{1}, e_{1}), (s_{2}, e_{2}), \cdots , (s_{n}, e_{n}) \}\]
+\\
+Generation and manipulation of genes are further described in the following sections.
