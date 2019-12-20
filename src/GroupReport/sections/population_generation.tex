@@ -33,42 +33,10 @@ int bar(int n) {
 
 A range $[4, 5]$ is valid; in this case, we hold and release a lock right before and after executing \verb|arr[i] = x|. On the other hand, $[1, 9]$ is invalid because it is not contained in a function. $[5, 6]$ is invalid because there are no global variables. $[2, 5]$ is invalid because the scope inside the \verb|for| loop neither contains $[2, 5]$ nor is contained in $[2, 5]$. Finally, $[7, 8]$ is invalid because it contains \verb|return|.
 
-We use Clang AST to detect the references to global variables. An expression in a function refers to a global variable if there is a \verb|DeclRefExpr| node whose reference variable has a global storage:
-
-\begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left]
-static StatementMatcher global_match =
-  declRefExpr(
-    to(
-      varDecl(
-        hasGlobalStorage()
-      ).bind("globalVar")
-    ),
-    hasAncestor(
-      functionDecl().bind("function")
-    )
-  ).bind("globalRef");
-  \end{lstlisting}
-
-Next, a scope in a function is detected by a \verb|CoumpoundStmt| node:
-
-\begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left]
-static StatementMatcher scope_match =
-  compoundStmt(
-    hasAncestor(
-      functionDecl().bind("function")
-    )
-  ).bind("scope");
-\end{lstlisting}
-
-Finally, a return statement in a function is detected by a \verb|ReturnStmt| node:
-
-\begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left]
-static StatementMatcher return_match =
-  returnStmt(
-    hasAncestor(
-      functionDecl().bind("function")
-    )
-  ).bind("return");
-\end{lstlisting}
+We use Clang AST to detect the references to global variables. Each condition is checked by the AST matcher with the following procedures: \begin{itemize}
+    \item A global variable reference is detected by a \verb|DeclRefExpr| node, which has an ancestor \verb|FunctionDecl| node, and refers to a \verb|VarDecl| node with the \verb|hasGlobalStorage| property.
+    \item A scope in a function is detected by a \verb|CompoundStmt| node.
+    \item A return statement in a function is detected by a \verb|ReturnStmt| node.
+\end{itemize}
 
 After finding all references to global variables, all return statements, and all scopes, we output all possible valid ranges in the program. To generate a population, we choose zero or more valid ranges such that no two ranges with the same kind of lock do not intersect.
