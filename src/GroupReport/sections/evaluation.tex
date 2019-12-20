@@ -1,7 +1,7 @@
 \section{Evaluation}
 \label{sec:eval}
 
-For the evaluation, we will check whether the program works as expected for given test codes and compare the result with optimal solution. The result of program is given in list $[(s1, e1), (s2, e2), ..., (sn, en)]$ which each $(si, ei)$ states for locking range. And the fitness will be given in tuple $(a, b)$ where $a$ is number of racing sets detected by ThreadSanitizer and $b$ is the number of machine instructions executed between locks.
+For the evaluation, we will check whether the program works as expected for given test codes and compare the result with optimal solution. The result of program is given in list $[(s1, e1), (s2, e2), ..., (sn, en)]$ which each $(si, ei)$ states for locking range. And the fitness will be given in tuple $(a, b)$ where $a$ is number of racing sets detected by ThreadSanitizer and $b$ is the number of machine instructions executed between locks. Since we have some constraints for our program, we made our own test codes which works in parrallel using pthread API in C. The test codes have no lock and they can cause data race.
 
 \subsection{easytest}
 "easytest.cpp" is short test to check whether the program considers the number of machine instructions of locks themselves. It has two versions, one iterates \verb|for| statement for one time, and the other iterates three times. The part of first version is like below:
