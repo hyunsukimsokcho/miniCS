@@ -56,12 +56,12 @@ Modern machines consume massive amount of data as well as drastic amount of comp
 \maketitle
 
 \section{Introduction}
-Here is the text of your introduction.
-
-\subsection{Subsection Heading Here}
-Write your subsection text here.
+Multi-threaded codes often come up with the problem called data race. It means multiple threads access the same memory location concurrently and at least one of them is writing. It may cause computation give wrong output depending on their execution order. It can be resolved by using exclusive locks to control accesses to that memory. But abusing lock will interrupt other threads' execution and it will lead to longer execution time.
+So it's important to protect shared memory location by using locks and also minimizing the interval(execution time) between lock and unlock. But it's hard to be achieved by hand, and some of races can be only detected on runtime.
+Our project MiniCS is solution for this problem. It produces population of candidate codes with locks and perform GA to get best code that's without data race and has minimum "lock interval" (Lock interval means "execution time between lock including lock and unlock themselves" on this paper).
 
 \section{Background}
+COMMENT!!! - Do we really need to write background?
 \subsection{Critical section}
 
 \subsection{Genetic algorithm}
@@ -77,14 +77,41 @@ Write your subsection text here.
 \subsection{Crossover}
 
 \subsection{Static analyzer}
+What does it mean?
 
 \subsection{Fitness evaluation}
+Since our goal is to build code "without data race" and has "minimum lock interval", we have two objective for fitness evaluation. 
+
+\subsubsection{Data race free}
+First objective is number of "racing sets". The term "racing set" means the set of two lines that have data race. Since we need data race free code, we need to minimize the number of racing sets to 0. And this number can be obtained by data race detector, ThreadSanitizer. It's part of Clang that can detect data race for given code. The detection report will be offered like the sample below:
+
+\begin{lstlisting}[frame=tb, xleftmargin=2em, framexleftmargin=1.5em, numbers=left]
+WARNING: ThreadSanitizer: data race
+  Write of size 4 at 0x7fe3c3075190:
+    #0 bar1() simple_stack2.cc:16
+    #1 Thread1(void*) simple_stack2.cc:34
+
+  Previous read of size 4 at 0x7fe3c3075190:
+    #0 bar2() simple_stack2.cc:29
+    #1 main simple_stack2.cc:41
+\end{lstlisting}
+
+This report gives us four racing sets $(16, 29)$, $(16, 41)$, $(34, 29)$, $(34, 41)$ that each $(a, b)$ means $a$-th line and $b$-th line have data race. Since the detection result of ThreadSanitizer depends on execution order of threads, we execute ThreadSanitizer for every possible execution orders (for $n$ threads, execute for $n!$ times) and count the number of distinct racing sets.
+ 
+\subsubsection{Lock interval}
+Second objective is number of machine instructions between locks(including themselves). Lock interval is 
 
 \section{Evaluation}
-Research questions?
+
 
 \section{Conclusion}
-Write your conclusion here.
+As a result,
+Slowdown of the program is occured by two reasons
+\begin{enumerate}
+    \item ThreadSanitizer should be executed for every possible execution order of threads.
+    \item GDB runs the program step by step between locks.
+\end{enumerate}
+To resolve this problem, 
 Possible improvements (e.g. Coevolution with Thread schedule with Qemu emulator)
 
 
